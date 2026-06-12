@@ -124,6 +124,258 @@ Simple default order: easy/high-impact first → complex last.
 
 ---
 
+---
+
+## Project Artifact Generation
+
+After the portfolio is confirmed, generate 5 project-level artifacts to `.make/context/`.
+These are file writes only — no MCP calls. Deterministic classification preserved.
+
+### Artifact 1 — context.md
+
+Synthesize the interview answers into a project context document:
+
+```markdown
+# Automation Project Context
+
+**Generated:** {date}
+**Project:** {descriptive project name derived from automations}
+
+## Domain
+{What business area these automations serve — e.g., "Lead Generation & CRM Sync for B2B SaaS"}
+
+## Users
+{Who will benefit from these automations, and who will maintain them}
+
+## Goals
+{What the user is trying to achieve — in plain language, not automation terms}
+{e.g., "Never manually enter a lead again. Know instantly when a deal closes."}
+
+## Integrations Required
+{List every service mentioned across all automations}
+- {Service}: {how it's used}
+
+## Constraints
+{Budget limits, timing requirements, compliance concerns, data sensitivity}
+
+## Automations in Scope ({n} total)
+{Brief one-line description of each, in build order}
+1. {title} — {trigger} → {action}
+2. {title} — ...
+```
+
+Save to: `.make/context/context.md`
+
+### Artifact 2 — prd.md
+
+Full product requirements document for the automation project:
+
+```markdown
+# Automation Project PRD
+
+**Version:** 1.0  
+**Date:** {date}
+
+## Overview
+{2-paragraph plain-language description of what this automation system does and why it matters}
+
+## Automations
+
+### {auto-001}: {title}
+**Priority:** {1-n}
+**Complexity:** {Low/Medium/High}
+
+**User Story:**
+As a {role}, I want {trigger event} to automatically {action}, so that {business outcome}.
+
+**Acceptance Criteria:**
+- [ ] When {trigger condition}, {action} happens within {time expectation}
+- [ ] If the automation fails, {error handling requirement}
+- [ ] {Any data quality or compliance requirement}
+
+**Inputs:** {data that enters the automation}
+**Outputs:** {what it produces or sends}
+**Frequency:** {how often it runs}
+**Cost:** ~{n} ops/month
+
+---
+### {auto-002}: ...
+```
+
+Save to: `.make/prd.md` (project root — primary reference document)
+
+### Artifact 3 — erd.md
+
+Data flow diagram showing how data moves between systems:
+
+```markdown
+# Automation Data Flow
+
+**Generated:** {date}
+
+## Integration Map
+
+\`\`\`mermaid
+flowchart LR
+  subgraph Sources
+    S1["{trigger service 1}"]
+    S2["{trigger service 2}"]
+  end
+  
+  subgraph Make.com
+    M1["{automation title 1}"]
+    M2["{automation title 2}"]
+  end
+  
+  subgraph Destinations
+    D1["{destination service 1}"]
+    D2["{destination service 2}"]
+  end
+  
+  S1 -->|"{data type}"| M1
+  S2 -->|"{data type}"| M2
+  M1 -->|"{data type}"| D1
+  M2 -->|"{data type}"| D2
+  M1 -->|"{data type}"| D2
+\`\`\`
+
+## Data Objects
+
+| Object | Source | Used By | Destination |
+|--------|--------|---------|-------------|
+| {data type} | {service} | {automation} | {service} |
+```
+
+Save to: `.make/context/erd.md`
+
+### Artifact 4 — system-design.md
+
+Architecture overview of the full automation system:
+
+```markdown
+# Automation System Design
+
+**Generated:** {date}
+
+## Architecture Overview
+{2-3 sentences describing the overall shape of the system}
+
+## Trigger Inventory
+| Automation | Trigger Type | Service | Frequency |
+|------------|-------------|---------|-----------|
+| {title} | Webhook/Schedule/Watch | {service} | {frequency} |
+
+## Connection Requirements
+| Service | Auth Type | Required For |
+|---------|-----------|-------------|
+| {service} | OAuth2/API Key/Webhook | {automation title(s)} |
+
+## Data Stores Required
+{List any persistent storage needs identified during interview}
+- {purpose}: {what data, why it needs to persist}
+
+## Automation Dependencies
+{If any automation feeds into another, show the chain}
+{auto-001} → produces data used by → {auto-002}
+
+## Error Handling Strategy
+{Overall approach: Telegram alerts, retry policy, fallback behavior}
+
+## Monthly Cost Estimate
+| Automation | Ops/Month | USD/Month |
+|------------|-----------|-----------|
+| {title} | ~{n} | ~${n} |
+| **Total** | **~{n}** | **~${n}** |
+```
+
+Save to: `.make/context/system-design.md`
+
+### Artifact 5 — stack.md
+
+Complete tech requirements checklist:
+
+```markdown
+# Tech Stack Requirements
+
+**Generated:** {date}
+**Status:** Generated from discovery — verify during Bootstrap
+
+## Make.com Apps Required
+
+| App | Native Module? | Used By | Notes |
+|-----|---------------|---------|-------|
+| {service} | ✅ Yes | {automation} | |
+| {service} | ❌ No — HTTP module needed | {automation} | Consider MCP server |
+
+## MCP Servers Required
+
+| MCP | Currently Available | Required For |
+|-----|--------------------|----|
+| make | Required | All automations |
+| telnyx | Required (alerts) | Error notifications |
+| {other} | Optional | {automation} |
+
+## Connections to Set Up
+
+| Service | Auth Type | Who Owns Credentials | Priority |
+|---------|-----------|---------------------|----------|
+| {service} | OAuth2 | {user/team} | Blocking |
+| {service} | API Key | {user/team} | Blocking |
+
+## Environment Variables Needed
+
+```env
+# Required
+MAKE_API_KEY=
+MAKE_TEAM_ID=
+TELNYX_API_KEY=
+TELEGRAM_CHAT_ID=
+
+# For automations in this project
+{SERVICE}_API_KEY=
+{OTHER}_API_KEY=
+```
+
+## Data Stores to Create
+
+| Name | Purpose | Schema |
+|------|---------|--------|
+| {name} | {what it stores} | {fields} |
+
+## External APIs (Cost Impact)
+
+| API | Free Tier | Paid Tier | Used By |
+|-----|-----------|-----------|---------|
+| {api} | {limit} | {cost} | {automation} |
+```
+
+Save to: `.make/context/stack.md`
+
+---
+
+### Artifact Generation Summary
+
+After all 5 artifacts are written, confirm to user:
+```
+PROJECT ARTIFACTS GENERATED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ context.md       — project context and goals
+✅ prd.md           — full requirements document  
+✅ erd.md           — data flow diagram
+✅ system-design.md — architecture overview
+✅ stack.md         — tech requirements checklist
+
+All saved to .make/context/
+
+Next: Bootstrap will map your workspace and check which
+connections and MCPs are already set up.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+Update `current-session.json` → `artifacts_generated: true`.
+
+---
+
 ## Output Contract
 
 Return to calling orchestrator:

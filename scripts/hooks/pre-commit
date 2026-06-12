@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Git pre-commit hook — auto-bumps plugin.json version on every commit.
+# Installed by: scripts/install-hooks.sh
+# Source of truth: scripts/hooks/pre-commit (tracked in git)
+
+set -euo pipefail
+
+REPO_ROOT=$(git rev-parse --show-toplevel)
+
+# Skip bump for release/chore commits from the ship flow itself
+MSG_FILE="${REPO_ROOT}/.git/COMMIT_EDITMSG"
+if [ -f "$MSG_FILE" ]; then
+  MSG=$(cat "$MSG_FILE" | head -1)
+  if echo "$MSG" | grep -qE "^chore: release v"; then
+    exit 0
+  fi
+fi
+
+# Export commit message file path so bump-version.sh can read the incoming
+# message and use it for minor/major detection
+export COMMIT_MSG_FILE="${REPO_ROOT}/.git/COMMIT_EDITMSG"
+
+"${REPO_ROOT}/scripts/bump-version.sh" --no-changelog --no-tag
