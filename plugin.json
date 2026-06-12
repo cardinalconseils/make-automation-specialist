@@ -1,0 +1,108 @@
+{
+  "name": "make-automation-specialist",
+  "version": "1.0.0",
+  "description": "Claude Code plugin that turns any project into an intelligent Make.com automation workspace. Conversational automation building, scenario auditing, compliance assessment, and observability.",
+  "author": "pmcardinal",
+  "license": "MIT",
+
+  "mcps": {
+    "required": ["make", "telnyx"],
+    "optional": ["supabase", "n8n", "github"]
+  },
+
+  "env": {
+    "required": ["MAKE_API_KEY", "MAKE_TEAM_ID"],
+    "optional": [
+      "TELNYX_API_KEY",
+      "TELEGRAM_CHAT_ID",
+      "SUPABASE_URL",
+      "SUPABASE_KEY",
+      "N8N_BASE_URL",
+      "N8N_API_KEY",
+      "GITHUB_TOKEN"
+    ]
+  },
+
+  "agents": [
+    {
+      "id": "automation-specialist",
+      "name": "Make.com Automation Specialist",
+      "file": "agents/automation-specialist.md",
+      "description": "Primary conversational agent. Discovers business needs, coordinates planning, presents plans for approval, and delegates execution.",
+      "triggers": ["default", "slash:make", "slash:build"]
+    },
+    {
+      "id": "scenario-auditor",
+      "name": "Scenario Auditor",
+      "file": "agents/scenario-auditor.md",
+      "description": "Analyzes Make.com scenarios for issues, inefficiencies, and compliance risks. Proposes and executes fixes.",
+      "triggers": ["slash:audit", "slash:fix"]
+    },
+    {
+      "id": "automation-planner",
+      "name": "Automation Planner",
+      "file": "agents/automation-planner.md",
+      "description": "Pure plan generation. Takes a business requirement, produces an AutomationPlan with cost estimate, risk level, and step breakdown. Never executes.",
+      "triggers": ["slash:plan"]
+    },
+    {
+      "id": "scenario-reporter",
+      "name": "Scenario Reporter",
+      "file": "agents/scenario-reporter.md",
+      "description": "Generates visual Mermaid flowcharts and written reports for scenarios. Read-only — no MCP writes.",
+      "triggers": ["slash:diagram", "slash:report"]
+    }
+  ],
+
+  "skills": [
+    { "id": "core-behaviors", "file": "skills/core-behaviors/SKILL.md" },
+    { "id": "project-discoverer", "file": "skills/project-discoverer/SKILL.md" },
+    { "id": "plan-builder", "file": "skills/plan-builder/SKILL.md" },
+    { "id": "scenario-reader", "file": "skills/scenario-reader/SKILL.md" },
+    { "id": "diagram-generator", "file": "skills/diagram-generator/SKILL.md" },
+    { "id": "compliance-scanner", "file": "skills/compliance-scanner/SKILL.md" },
+    { "id": "cost-estimator", "file": "skills/cost-estimator/SKILL.md" },
+    { "id": "alert-dispatcher", "file": "skills/alert-dispatcher/SKILL.md" },
+    { "id": "execution-logger", "file": "skills/execution-logger/SKILL.md" }
+  ],
+
+  "hooks": [
+    {
+      "id": "on-project-open",
+      "file": "hooks/on-project-open.md",
+      "event": "project.open",
+      "description": "Runs on first session open. Discovers MCPs, maps workspace, writes workspace.json."
+    },
+    {
+      "id": "pre-execute",
+      "file": "hooks/pre-execute.md",
+      "event": "before.mcp.write",
+      "description": "Approval gate enforcer. Halts any Make.com write MCP call until user confirms."
+    },
+    {
+      "id": "post-execute",
+      "file": "hooks/post-execute.md",
+      "event": "after.mcp.call",
+      "description": "Writes execution log and triggers Telegram alert on failure."
+    },
+    {
+      "id": "on-error",
+      "file": "hooks/on-error.md",
+      "event": "error",
+      "description": "Auto-recovery attempt, log write, and Telegram alert for unresolvable errors."
+    }
+  ],
+
+  "output": {
+    "root": ".make",
+    "directories": [
+      "plans",
+      "logs",
+      "scenarios",
+      "changelog",
+      "audits",
+      "compliance",
+      "diagrams"
+    ]
+  }
+}
