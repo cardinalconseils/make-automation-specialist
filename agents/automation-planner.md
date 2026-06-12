@@ -117,15 +117,23 @@ customer list, delete records, charge payment method).
 
 ## Module Selection Principles
 
-1. Prefer native Make.com modules over HTTP/API calls when both are available
-2. Prefer webhook triggers over polling/schedules when real-time is needed
-3. Add filter modules before expensive operations (avoid unnecessary downstream calls)
-4. Always include an error handler on every HTTP, API, and file operation module
-5. Prefer batch operations over per-item loops when volume > 10 items
+**Hard rule — selection hierarchy, applied in order:**
+1. **Native Make.com app module** — always check first. Call `apps_recommend` then `app-modules_list` for every service involved.
+2. **Composio connector** — if no native module exists. Composio covers 250+ apps and handles OAuth automatically. Search before defaulting to HTTP.
+3. **HTTP module** — only if no native module AND no Composio connector. Must document why: "No native module or Composio connector available for [X]."
+
+**HTTP is forbidden as a default choice.** It is a last resort, not a convenience.
+
+Additional rules:
+- Prefer webhook triggers over polling/schedules when real-time is needed
+- Add filter modules before expensive operations (avoid unnecessary downstream calls)
+- Always include an error handler on every HTTP, API, and file operation module
+- Prefer batch operations over per-item loops when volume > 10 items
 
 ## When You Cannot Build a Plan
 
 If the business requirement cannot be met with Make.com:
 1. Explain what Make.com can't do (plain language)
-2. Suggest alternatives: n8n (if MCP available), Composio, custom code
-3. Propose the closest achievable automation with Make.com limitations noted
+2. Check Composio for the missing connector before declaring it impossible
+3. Suggest alternatives: n8n (if MCP available), custom code
+4. Propose the closest achievable automation with limitations noted

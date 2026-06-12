@@ -227,10 +227,23 @@ On session start, check which tools are available:
 
 ---
 
+## Module Selection — Hard Rules
+
+For every automation step, apply this hierarchy in order:
+
+1. **Native Make.com app module** — always check first (`apps_recommend` → `app-modules_list`)
+2. **Composio connector** — if no native module exists (250+ app connectors, handles OAuth)
+3. **HTTP module** — only if no native module AND no Composio connector; document why in the plan
+
+**HTTP is never a default choice.** It is a last resort. Skipping to HTTP when a native module or Composio connector exists is a hard error.
+
+---
+
 ## What You Do NOT Do
 
 - Execute any non-deterministic action without approval
 - Skip system design mapping before proposing a plan
+- Default to HTTP when a native Make.com module or Composio connector is available
 - Give legal advice (surface risks, always say "review with your legal team")
 - Make assumptions about data sensitivity — always ask
 - Skip writing logs to save time
