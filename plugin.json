@@ -1,17 +1,25 @@
 {
   "name": "make-automation-specialist",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Claude Code plugin that turns any project into an intelligent Make.com automation workspace. Conversational automation building, scenario auditing, compliance assessment, and observability.",
   "author": "pmcardinal",
   "license": "MIT",
-
   "mcps": {
-    "required": ["make", "telnyx"],
-    "optional": ["supabase", "n8n", "github"]
+    "required": [
+      "make",
+      "telnyx"
+    ],
+    "optional": [
+      "supabase",
+      "n8n",
+      "github"
+    ]
   },
-
   "env": {
-    "required": ["MAKE_API_KEY", "MAKE_TEAM_ID"],
+    "required": [
+      "MAKE_API_KEY",
+      "MAKE_TEAM_ID"
+    ],
     "optional": [
       "TELNYX_API_KEY",
       "TELEGRAM_CHAT_ID",
@@ -22,59 +30,103 @@
       "GITHUB_TOKEN"
     ]
   },
-
   "agents": [
     {
       "id": "automation-specialist",
       "name": "Make.com Automation Specialist",
       "file": "agents/automation-specialist.md",
       "description": "Primary conversational agent. Discovers business needs, coordinates planning, presents plans for approval, and delegates execution.",
-      "triggers": ["default", "slash:make", "slash:build"]
+      "triggers": [
+        "default",
+        "slash:make",
+        "slash:build"
+      ]
     },
     {
       "id": "scenario-orchestrator",
       "name": "Scenario Orchestrator",
       "file": "agents/scenario-orchestrator.md",
       "description": "Full-lifecycle orchestrator. Runs Kickstart → Bootstrap → System Design → Sprint to build a portfolio of scenarios in one guided session.",
-      "triggers": ["slash:factory"]
+      "triggers": [
+        "slash:factory"
+      ]
     },
     {
       "id": "scenario-auditor",
       "name": "Scenario Auditor",
       "file": "agents/scenario-auditor.md",
       "description": "Analyzes Make.com scenarios for issues, inefficiencies, and compliance risks. Proposes and executes fixes.",
-      "triggers": ["slash:audit", "slash:fix"]
+      "triggers": [
+        "slash:audit",
+        "slash:fix"
+      ]
     },
     {
       "id": "automation-planner",
       "name": "Automation Planner",
       "file": "agents/automation-planner.md",
       "description": "Pure plan generation. Takes a business requirement, produces an AutomationPlan with cost estimate, risk level, and step breakdown. Never executes.",
-      "triggers": ["slash:plan"]
+      "triggers": [
+        "slash:plan"
+      ]
     },
     {
       "id": "scenario-reporter",
       "name": "Scenario Reporter",
       "file": "agents/scenario-reporter.md",
       "description": "Generates visual Mermaid flowcharts and written reports for scenarios. Read-only — no MCP writes.",
-      "triggers": ["slash:diagram", "slash:report"]
+      "triggers": [
+        "slash:diagram",
+        "slash:report"
+      ]
     }
   ],
-
   "skills": [
-    { "id": "core-behaviors", "file": "skills/core-behaviors/SKILL.md" },
-    { "id": "project-discoverer", "file": "skills/project-discoverer/SKILL.md" },
-    { "id": "kickstart-intake", "file": "skills/kickstart-intake/SKILL.md" },
-    { "id": "plan-builder", "file": "skills/plan-builder/SKILL.md" },
-    { "id": "sprint-runner", "file": "skills/sprint-runner/SKILL.md" },
-    { "id": "scenario-reader", "file": "skills/scenario-reader/SKILL.md" },
-    { "id": "diagram-generator", "file": "skills/diagram-generator/SKILL.md" },
-    { "id": "compliance-scanner", "file": "skills/compliance-scanner/SKILL.md" },
-    { "id": "cost-estimator", "file": "skills/cost-estimator/SKILL.md" },
-    { "id": "alert-dispatcher", "file": "skills/alert-dispatcher/SKILL.md" },
-    { "id": "execution-logger", "file": "skills/execution-logger/SKILL.md" }
+    {
+      "id": "core-behaviors",
+      "file": "skills/core-behaviors/SKILL.md"
+    },
+    {
+      "id": "project-discoverer",
+      "file": "skills/project-discoverer/SKILL.md"
+    },
+    {
+      "id": "kickstart-intake",
+      "file": "skills/kickstart-intake/SKILL.md"
+    },
+    {
+      "id": "plan-builder",
+      "file": "skills/plan-builder/SKILL.md"
+    },
+    {
+      "id": "sprint-runner",
+      "file": "skills/sprint-runner/SKILL.md"
+    },
+    {
+      "id": "scenario-reader",
+      "file": "skills/scenario-reader/SKILL.md"
+    },
+    {
+      "id": "diagram-generator",
+      "file": "skills/diagram-generator/SKILL.md"
+    },
+    {
+      "id": "compliance-scanner",
+      "file": "skills/compliance-scanner/SKILL.md"
+    },
+    {
+      "id": "cost-estimator",
+      "file": "skills/cost-estimator/SKILL.md"
+    },
+    {
+      "id": "alert-dispatcher",
+      "file": "skills/alert-dispatcher/SKILL.md"
+    },
+    {
+      "id": "execution-logger",
+      "file": "skills/execution-logger/SKILL.md"
+    }
   ],
-
   "hooks": [
     {
       "id": "on-project-open",
@@ -101,7 +153,6 @@
       "description": "Auto-recovery attempt, log write, and Telegram alert for unresolvable errors."
     }
   ],
-
   "output": {
     "root": ".make",
     "directories": [
