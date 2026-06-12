@@ -81,15 +81,22 @@ STEP 5 — Webhook inventory
   mcp: hooks_list → existing webhooks and their URLs
   cli: make-cli hooks list --team-id {id}
 
-STEP 6 — Design (no tools needed — think and write)
+STEP 6 — Module documentation lookup (docs-researcher skill — mandatory)
+  For every service the automation will touch:
+  mcp: apps_recommend → confirm app slug
+  mcp: app-modules_list → find exact module name
+  mcp: app-module_get → get full parameter spec (required fields, types, enums)
+  mcp: app_documentation_get → auth method, rate limits, limitations
+  → Produce a Module Spec Card for each module before designing anything
+  → Never proceed to Step 7 without exact field names from the spec
+
+STEP 7 — Design (informed by Step 6 spec cards, no guessing)
   - Map the business requirement to existing resources
   - Identify which connections are already available vs. need setup
-  - Identify data structures needed
-  - Design the scenario flow
+  - Use only exact field names from module specs
   - Estimate operations and cost (see cost-estimator skill)
-  - Validate design mentally against existing scenario patterns
 
-STEP 7 — Validate before building
+STEP 8 — Validate before building
   mcp: validate_blueprint_schema — validate your planned blueprint
   mcp: validate_module_configuration — validate each module config
   mcp: validate_scheduling_schema — if scheduled trigger
