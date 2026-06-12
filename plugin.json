@@ -1,6 +1,6 @@
 {
   "name": "make-automation-specialist",
-  "version": "1.0.2",
+  "version": "1.2.0",
   "description": "Claude Code plugin that turns any project into an intelligent Make.com automation workspace. Conversational automation building, scenario auditing, compliance assessment, and observability.",
   "author": "pmcardinal",
   "license": "MIT",
@@ -48,7 +48,8 @@
       "file": "agents/scenario-orchestrator.md",
       "description": "Full-lifecycle orchestrator. Runs Kickstart → Bootstrap → System Design → Sprint to build a portfolio of scenarios in one guided session.",
       "triggers": [
-        "slash:factory"
+        "slash:factory",
+        "slash:kickstart"
       ]
     },
     {
@@ -125,6 +126,42 @@
     {
       "id": "execution-logger",
       "file": "skills/execution-logger/SKILL.md"
+    },
+    {
+      "id": "memory",
+      "file": "skills/memory/SKILL.md"
+    },
+    {
+      "id": "database-builder",
+      "file": "skills/database-builder/SKILL.md"
+    },
+    {
+      "id": "connector-builder",
+      "file": "skills/connector-builder/SKILL.md"
+    },
+    {
+      "id": "mcp-builder",
+      "file": "skills/mcp-builder/SKILL.md"
+    },
+    {
+      "id": "persona-automation-consultant",
+      "file": "skills/personas/automation-consultant.md"
+    },
+    {
+      "id": "persona-project-manager",
+      "file": "skills/personas/project-manager.md"
+    },
+    {
+      "id": "persona-qa-engineer",
+      "file": "skills/personas/qa-engineer.md"
+    },
+    {
+      "id": "persona-solution-architect",
+      "file": "skills/personas/solution-architect.md"
+    },
+    {
+      "id": "persona-technical-writer",
+      "file": "skills/personas/technical-writer.md"
     }
   ],
   "hooks": [
@@ -151,6 +188,12 @@
       "file": "hooks/on-error.md",
       "event": "error",
       "description": "Auto-recovery attempt, log write, and Telegram alert for unresolvable errors."
+    },
+    {
+      "id": "on-session-end",
+      "file": "hooks/on-session-end.md",
+      "event": "session.stop",
+      "description": "Writes session memory snapshot and appends decisions/gotchas to persistent memory files."
     }
   ],
   "output": {
@@ -163,7 +206,11 @@
       "audits",
       "compliance",
       "diagrams",
-      "factory"
+      "factory",
+      "context",
+      "memory",
+      "memory/sessions",
+      "mcp-servers"
     ]
   }
 }

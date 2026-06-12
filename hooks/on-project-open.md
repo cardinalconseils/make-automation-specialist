@@ -9,6 +9,21 @@ Ensure the workspace is discovered and ready before the user asks their first qu
 
 ## Execution
 
+### Check 0 — Load Project Memory
+
+Before workspace checks, load persistent memory using the `memory` skill:
+
+```bash
+# Most recent session snapshot
+ls .make/memory/sessions/ 2>/dev/null | sort | tail -1
+```
+
+- If a session file exists: read it and extract the one-line summary
+- If `.make/context/context.md` exists: note the project domain and goals
+- Store this context — it informs the greeting and all responses this session
+
+Memory summary will appear in the greeting if a prior session exists.
+
 ### Check 1 — Is this first open?
 
 Read `.make/workspace.json`.
@@ -42,6 +57,12 @@ After all checks, display:
 ```
 Make.com Automation Specialist — Ready
 
+{If prior session memory exists:}
+Last session: {date} — {one-line summary from snapshot}
+
+{If context.md exists:}
+Project: {domain from context.md}
+
 Workspace: {name}
 Plan: {tier} | Operations: {used}/{limit} this month ({percent}%)
 Active scenarios: {count}
@@ -50,7 +71,8 @@ Active scenarios: {count}
 {If alerts missed: "Missed alerts: {n} — review above"}
 
 What would you like to do?
-Type /make to build a new automation, /audit to review your scenarios,
+Type /kickstart to map a new project, /factory to build automations,
+/make for a single automation, /audit to review scenarios,
 or just tell me what you need.
 ```
 

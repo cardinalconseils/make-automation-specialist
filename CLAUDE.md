@@ -84,10 +84,48 @@ When an automation touches personal data, payment data, or health data:
 - Recommend remediation
 - Always add: "This is not legal advice. Review with your legal team."
 
+## Memory System
+
+The project maintains persistent memory across sessions in `.make/memory/`:
+
+- `facts.md` — non-obvious API behaviors, service constraints, integration quirks
+- `decisions.md` — architecture and automation design decisions with rationale
+- `gotchas.md` — errors, timing issues, and traps discovered during sessions
+- `sessions/` — one snapshot per session (written automatically at session end)
+
+**When to write memory:**
+- A significant integration behavior is discovered (e.g., "Stripe webhooks have a 5s timeout")
+- An architecture decision is made (e.g., "chose polling over webhook because volume is low")
+- A non-obvious error is diagnosed and resolved
+
+**When to read memory:**
+- Automatically on session open (hook: on-project-open)
+- Before designing automations involving services that may have prior gotchas
+
+**Format:** Append-only, dated headers: `## [YYYY-MM-DD] Short Title`
+
+Use the `memory` skill for all read/write operations.
+
+## Project Artifacts
+
+When a project has been kicked off via `/kickstart` or `/factory`, project-level
+artifacts are stored in `.make/context/`:
+
+- `context.md` — project domain, users, goals, integrations, constraints
+- `prd.md` — full project requirements (all automations as user stories) — also at `.make/prd.md`
+- `erd.md` — data flow / integration map (Mermaid diagram)
+- `system-design.md` — architecture overview, trigger inventory, dependencies
+- `stack.md` — required apps, connections, MCPs, API keys
+- `requirements.md` — generated during bootstrap gap analysis
+
+Always check these files before designing new automations — they contain the project context.
+
 ## Slash Commands
 
 | Command | Agent | Description |
 |---------|-------|-------------|
+| `/kickstart` | scenario-orchestrator | Discover project + generate context artifacts |
+| `/factory` | scenario-orchestrator | Full pipeline: kickstart → bootstrap → design → build |
 | `/make` | automation-specialist | Start new automation conversation |
 | `/build` | automation-specialist | Same as /make |
 | `/audit` | scenario-auditor | Audit one or all scenarios |
