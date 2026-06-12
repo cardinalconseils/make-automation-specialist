@@ -5,7 +5,42 @@ description: Complete reference for all Make.com tools available via MCP and CLI
 
 # Make.com Tool Reference
 
-## Tool Selection Rule
+## Module Selection Rule — Native First, Always
+
+**Never use the HTTP module if a native Make.com module exists for the service.**
+
+This is a hard rule, not a preference.
+
+| Situation | Wrong | Right |
+|-----------|-------|-------|
+| Sending a Slack message | HTTP module → POST to Slack API | Slack → Send a Message |
+| Creating a Google Sheet row | HTTP module → POST to Sheets API | Google Sheets → Add a Row |
+| Sending an email via Gmail | HTTP module → Gmail REST API | Gmail → Send an Email |
+| Creating a HubSpot contact | HTTP module → POST to HubSpot API | HubSpot → Create a Contact |
+
+**Why this matters:**
+- Native modules handle OAuth refresh automatically — HTTP modules break when tokens expire
+- Native modules are typed — fields are validated at design time, not at runtime
+- Native modules count as 1 operation — HTTP modules still count as 1 but are harder to debug
+- Native modules show in the connections list — HTTP modules hide auth complexity and make auditing harder
+- Make.com support covers native modules — custom HTTP calls are your responsibility
+
+**Before designing any automation step:**
+1. Call `mcp__claude_ai_Make__apps_recommend` with the service name
+2. Call `mcp__claude_ai_Make__app-modules_list` to see all available modules for that app
+3. Call `mcp__claude_ai_Make__app_documentation_get` for module-level docs
+4. Only if no native module exists: use HTTP module, and document why in the plan
+
+**HTTP module is acceptable only when:**
+- The service has no Make.com app at all
+- The specific API endpoint has no matching native module (e.g., a new endpoint added after the app was built)
+- The user explicitly requires it for a one-time integration with an internal/custom API
+
+When HTTP is unavoidable, always name it clearly in the plan: "There is no native module for [service/endpoint], so we will use an HTTP call. This means we will need to manage authentication manually."
+
+---
+
+## Tool Selection Rule — MCP vs CLI
 
 **MCP first.** Use MCP tools by default — they return structured data, handle auth automatically, and are fully typed.
 

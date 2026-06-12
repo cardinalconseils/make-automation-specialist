@@ -32,6 +32,13 @@
       "triggers": ["default", "slash:make", "slash:build"]
     },
     {
+      "id": "scenario-orchestrator",
+      "name": "Scenario Orchestrator",
+      "file": "agents/scenario-orchestrator.md",
+      "description": "Full-lifecycle orchestrator. Runs Kickstart → Bootstrap → System Design → Sprint to build a portfolio of scenarios in one guided session.",
+      "triggers": ["slash:factory"]
+    },
+    {
       "id": "scenario-auditor",
       "name": "Scenario Auditor",
       "file": "agents/scenario-auditor.md",
@@ -57,7 +64,9 @@
   "skills": [
     { "id": "core-behaviors", "file": "skills/core-behaviors/SKILL.md" },
     { "id": "project-discoverer", "file": "skills/project-discoverer/SKILL.md" },
+    { "id": "kickstart-intake", "file": "skills/kickstart-intake/SKILL.md" },
     { "id": "plan-builder", "file": "skills/plan-builder/SKILL.md" },
+    { "id": "sprint-runner", "file": "skills/sprint-runner/SKILL.md" },
     { "id": "scenario-reader", "file": "skills/scenario-reader/SKILL.md" },
     { "id": "diagram-generator", "file": "skills/diagram-generator/SKILL.md" },
     { "id": "compliance-scanner", "file": "skills/compliance-scanner/SKILL.md" },
@@ -102,7 +111,8 @@
       "changelog",
       "audits",
       "compliance",
-      "diagrams"
+      "diagrams",
+      "factory"
     ]
   }
 }

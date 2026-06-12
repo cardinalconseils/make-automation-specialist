@@ -1,0 +1,9 @@
+{
+  "name": "make-automation-specialist",
+  "version": "1.0.0",
+  "description": "Business process evaluation and smart automation specialist. Turns Claude into a Make.com expert: conversational automation building, scenario auditing, AI agent creation, compliance assessment, and Telegram alerting.",
+  "author": {
+    "name": "pmcardinal",
+    "email": "info@pmcardinal.com"
+  }
+}

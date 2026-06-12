@@ -3,9 +3,8 @@
 .env.local
 .env.*.local
 
-# Runtime output — not tracked in git
-# Uncomment if you want to exclude .make/ from git
-# .make/
+# Runtime output — Make.com workspace data
+.make/
 
 # OS
 .DS_Store
@@ -16,3 +15,19 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+
+# CKS tooling artifacts
+.learnings/
+.kickstart/
+.prd/
+.attractor/
+.concept/
+.evals/
+.assess/
+.voice/
+.ideation/
+.agents/
+.agentic-os/
+
+# Original idea file
+Idea.txt 

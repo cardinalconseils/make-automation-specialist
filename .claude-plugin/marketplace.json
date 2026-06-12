@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "make-automation-specialist",
+  "description": "Business process evaluation and smart automation specialist for Make.com",
+  "owner": {
+    "name": "pmcardinal",
+    "email": "info@pmcardinal.com"
+  },
+  "plugins": [
+    {
+      "name": "make-automation-specialist",
+      "source": "./",
+      "description": "Turns Claude into a Make.com expert: conversational automation building, scenario auditing, AI agent creation, compliance assessment, and Telegram alerting.",
+      "version": "1.0.0"
+    }
+  ]
+}

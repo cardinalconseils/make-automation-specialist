@@ -66,6 +66,19 @@ This would run approximately [frequency].
 Does that match what you have in mind?
 ```
 
+### Step 2b — Select Modules (Native First)
+
+Before generating any plan, identify every service the automation will touch.
+For each service:
+1. `mcp__claude_ai_Make__apps_recommend` — confirm the app exists in Make.com
+2. `mcp__claude_ai_Make__app-modules_list` — list all available modules for that app
+3. Pick the most specific native module. Never default to HTTP if a native module exists.
+
+**Hard rule: HTTP module is forbidden when a native module exists.**
+
+If no native module exists for a service or endpoint, flag it explicitly in the plan:
+> "There is no native Make.com module for [X]. We will use an HTTP call and handle authentication manually."
+
 ### Step 3 — Generate Plan
 
 Call the automation-planner agent to generate the AutomationPlan, then:
