@@ -1,3 +1,9 @@
+---
+name: error-handler
+description: "Error handling patterns, directives, and audit checklists for Make.com scenarios"
+allowed-tools: Read, Grep, Glob
+---
+
 # Error Handler Skill
 
 Load this skill when designing, auditing, or reviewing Make.com scenarios.

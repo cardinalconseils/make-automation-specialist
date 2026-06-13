@@ -103,6 +103,15 @@
         "slash:sms",
         "slash:voice"
       ]
+    },
+    {
+      "id": "deep-researcher",
+      "name": "Integration Researcher",
+      "file": "agents/deep-researcher.md",
+      "description": "Researches Make.com integrations before building — checks native app support, API docs, rate limits, webhook availability, and known gotchas.",
+      "triggers": [
+        "slash:research"
+      ]
     }
   ],
   "skills": [
@@ -217,6 +226,14 @@
     {
       "id": "persona-telnyx-consultant",
       "file": "skills/personas/telnyx-consultant.md"
+    },
+    {
+      "id": "agent-safety",
+      "file": "skills/agent-safety/SKILL.md"
+    },
+    {
+      "id": "anti-patterns",
+      "file": "skills/anti-patterns/SKILL.md"
     }
   ],
   "hooks": [
@@ -255,6 +272,12 @@
       "file": "hooks/on-sms-voice-context.md",
       "event": "before.agent.respond",
       "description": "Detects SMS, voice, and Telnyx-specific keywords in user messages and routes to telnyx-agent. Ignores Telegram-only context."
+    },
+    {
+      "id": "on-pre-compact",
+      "file": "hooks/on-pre-compact.md",
+      "event": "pre.compact",
+      "description": "Saves workspace snapshot before context compaction so no active work context is lost."
     }
   ],
   "output": {
@@ -272,7 +295,8 @@
       "memory",
       "memory/sessions",
       "mcp-servers",
-      "context/ai-agents"
+      "context/ai-agents",
+      "research"
     ]
   }
 }

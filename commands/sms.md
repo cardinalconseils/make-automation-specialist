@@ -1,3 +1,8 @@
+---
+description: Activate Telnyx SMS specialist for text messaging setup, troubleshooting, and compliance
+allowed-tools: Agent
+---
+
 # /sms Command
 
 Activates the Telnyx SMS specialist flow for text messaging setup, troubleshooting, and compliance.

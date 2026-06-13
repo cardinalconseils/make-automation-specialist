@@ -1,3 +1,9 @@
+---
+name: formula-expert
+description: "Make.com built-in functions, expression syntax, and module field expression patterns"
+allowed-tools: Read, Grep, Glob
+---
+
 # Formula Expert Skill
 
 Load this skill before writing any Make.com module field expressions.

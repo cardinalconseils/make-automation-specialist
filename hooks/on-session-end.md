@@ -1,46 +1,28 @@
 # Hook: on-session-end
 
 **Event:** session.stop
-**Trigger:** Fires when the Claude Code session ends (user closes, /exit, context limit)
+**Trigger:** Fires when the Claude Code session ends
 
 ## Purpose
 
-Write a session memory snapshot to `.make/memory/sessions/` so the next session
-can see what was done. Also appends any new decisions or gotchas discovered during
-the session to the persistent memory files.
-
-This hook is silent — it does NOT surface messages to the user.
-If nothing happened this session, it writes nothing.
+Write a session memory snapshot and extract structured learnings (facts, decisions,
+gotchas) so the next session opens with full context.
 
 ---
 
-## Step 1 — Determine If Session Had Meaningful Activity
+## Step 1 — Check for Meaningful Activity
 
-Check whether any of the following occurred this session:
-- A Make.com MCP call was made (check `.make/logs/tool-audit.log` for today's entries)
+Skip this hook entirely if NONE of these occurred:
+- A Make.com MCP call was made (check `.make/logs/tool-audit.log` for today)
 - A scenario was created, modified, or activated
 - An audit was run
-- A factory phase was completed
-- A plan was generated
-
-If none of the above: skip this hook entirely. Do not write an empty session file.
+- A factory phase completed
 
 ---
 
-## Step 2 — Collect Session Summary
+## Step 2 — Write Session Snapshot
 
-Gather from the session:
-
-1. **What was done** — which commands ran, which automations were touched
-2. **Scenarios affected** — IDs and names of any scenarios created/modified/activated
-3. **Factory phase** — if a factory session was active, what phase it ended in
-4. **New memory items** — any facts, decisions, or gotchas worth recording
-
----
-
-## Step 3 — Write Session Snapshot
-
-Get current timestamp: `date +"%Y-%m-%d-%H%M"`
+Timestamp: `date +"%Y-%m-%d-%H%M"`
 
 Write to `.make/memory/sessions/{timestamp}.md`:
 
@@ -48,45 +30,43 @@ Write to `.make/memory/sessions/{timestamp}.md`:
 # Session: {YYYY-MM-DD HHmm}
 
 ## What was done
-{1-3 bullet points — commands run, automations built/designed/audited}
+{1-3 bullets — commands run, automations built/designed/audited}
 
 ## Scenarios affected
-{List with IDs if known, or "None" if no scenario changes}
+{List with IDs, or "None"}
 
 ## Factory session
-{Phase reached, session ID if factory was active — or "Not a factory session"}
+{Phase reached, or "Not a factory session"}
 
 ## New memory written
-{List any new entries added to facts/decisions/gotchas — or "None"}
+{List entries added to facts/decisions/gotchas, or "None"}
 
-## Next steps (if known)
-{What was left unfinished, or "—" if complete}
+## Next steps
+{What was left unfinished, or "—"}
 ```
 
 ---
 
-## Step 4 — Append New Memory (if any)
+## Step 3 — Extract Structured Learnings
 
-If the session surfaced anything worth remembering:
+After writing the snapshot, review the session for new knowledge:
 
-**Decisions** (architecture choices made this session):
-- Append to `.make/memory/decisions.md` in `## [YYYY-MM-DD] Title` format
+**Decisions** — architecture choices made (trigger type, data model, connection):
+- Append to `.make/memory/decisions.md` as `## [YYYY-MM-DD] Title`
 
-**Gotchas** (issues or surprises encountered):
-- Append to `.make/memory/gotchas.md` in `## [YYYY-MM-DD] Title` format
+**Gotchas** — surprises, API quirks, timing issues, unexpected behaviors:
+- Append to `.make/memory/gotchas.md` as `## [YYYY-MM-DD] Title`
 
-**Facts** (new non-obvious integration knowledge):
-- Append to `.make/memory/facts.md` in `## [YYYY-MM-DD] Title` format
+**Facts** — non-obvious integration knowledge (rate limits, payload shapes, auth flows):
+- Append to `.make/memory/facts.md` as `## [YYYY-MM-DD] Title`
 
-Use the `memory` skill write protocol for format and append rules.
+Only write entries for genuinely new knowledge. Skip if nothing new was discovered.
 
 ---
 
-## Step 5 — Ensure Memory Files Exist
+## Step 4 — Ensure Memory Files Exist
 
-If `.make/memory/` directory doesn't exist yet, create it silently.
-
-Initialize any missing memory files with an empty header:
+If `.make/memory/` files are missing, initialize with:
 
 ```markdown
 # Make.com Project Memory — {facts|decisions|gotchas}
@@ -97,16 +77,4 @@ Initialize any missing memory files with an empty header:
 
 ## Silent Operation
 
-This hook writes files only. It never:
-- Displays output to the user
-- Makes Make.com MCP calls
-- Modifies existing memory entries (append-only)
-- Overwrites the session file if one exists for the same timestamp
-
----
-
-## What This Hook Does NOT Do
-
-- Send Telegram alerts (that's alert-dispatcher's job)
-- Write execution logs (that's execution-logger's job)
-- Update `.make/factory/current-session.json` (that's sprint-runner's job)
+This hook writes files only. Never makes MCP calls. Never overwrites existing entries.

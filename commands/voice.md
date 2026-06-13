@@ -1,3 +1,8 @@
+---
+description: Activate Telnyx voice specialist for phone calls, IVR, AI receptionist, and SIP trunking
+allowed-tools: Agent
+---
+
 # /voice Command
 
 Activates the Telnyx voice specialist flow for phone calls, IVR, AI receptionist, SIP trunking, and call recording.

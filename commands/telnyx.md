@@ -1,3 +1,8 @@
+---
+description: Activate Telnyx Communications Specialist for full platform management
+allowed-tools: Agent
+---
+
 # /telnyx Command
 
 Activates the Telnyx Communications Specialist for full platform management.
