@@ -76,7 +76,22 @@ Session file structure:
 }
 ```
 
-### 0b — Opening Interview
+### 0b — Mode Selection
+
+**Before the interview, always ask:**
+
+```
+Are you starting a new project, or do you have existing Make.com scenarios
+you want to map, improve, or debug?
+
+[1] New project — I'll interview you and build a plan from scratch
+[2] Existing project — I'll read your current scenarios and reverse-engineer a project map
+```
+
+- If **[1] New project** → proceed to Opening Interview below.
+- If **[2] Existing project** → run `existing-scenario-discovery` skill to fetch and translate live scenarios, then skip directly to Portfolio Review (0c).
+
+### 0b-ii — Opening Interview (new project only)
 
 Open with:
 ```
@@ -440,6 +455,21 @@ LEVEL 3: *_delete       (NEVER — not in scope for this agent)
 3. Offer to advance to the correct phase if the user is ready
 
 ---
+
+## Formula Expressions
+
+When writing any module field expression in a blueprint:
+1. Load `skills/formula-expert/SKILL.md` before writing expressions
+2. Always use semicolons as argument separators: `{{fn(a; b)}}`
+3. Never guess function names — verify in the skill
+
+## Telnyx / SMS / Voice Note
+
+If any automation in the factory run outputs SMS or makes voice calls:
+- Build the Make.com side of the scenario normally
+- After sprint, note: "The Telnyx side (phone numbers, messaging profiles, call routing) needs
+  to be configured separately. Run /telnyx to complete the communications setup."
+- Do NOT attempt to configure Telnyx directly — route to telnyx-agent.
 
 ## Constraints
 

@@ -77,26 +77,56 @@ most important ones.
 Your plan resets on: {plan_reset_date}
 ```
 
-## Sending via Telnyx MCP
+## Alert Channel Tiers
 
-Use Telnyx MCP to send via Telegram:
-- Recipient: `TELEGRAM_CHAT_ID` from environment
-- Parse Mode: plain text (no markdown in Telegram message)
+Alerts are sent via a 3-tier channel system based on severity and channel availability:
+
+### Tier 1 — Telegram (primary)
+Use for all alerts when `TELEGRAM_CHAT_ID` is set.
+- Send via `mcp__telnyx__send_message` to the Telegram bot
+- Parse mode: plain text (no markdown)
 - Keep under 500 characters when possible
 
-If Telnyx MCP is unavailable:
+### Tier 2 — SMS via Telnyx (secondary fallback)
+Use when Telegram fails or `TELEGRAM_CHAT_ID` is missing, and `TELNYX_ALERT_PHONE` is set.
+
+**Level 2 gate required** — show number and estimated cost before sending.
+
+SMS alert format (140 chars max for reliability):
+```
+Make.com Alert: {scenario_name} failed. {one-line error}. Check .make/logs/ for details.
+```
+
+Send via: `mcp__telnyx__send_message` with `to: TELNYX_ALERT_PHONE`
+
+### Tier 3 — Voice call (CRITICAL failures only)
+Use only for P0 failures (payment processing stopped, complete workspace down)
+when both Telegram and SMS have failed or are unavailable.
+
+Requires `TELNYX_ALERT_PHONE` and a configured Call Control Application.
+**Level 2 gate required.**
+
+1. `mcp__telnyx__make_call` to `TELNYX_ALERT_PHONE`
+2. On `call.answered`: `mcp__telnyx__speak` with:
+   "Make.com critical alert. Your automation workspace has a critical failure. Please check your logs immediately. Goodbye."
+3. `mcp__telnyx__hangup`
+
+### Fallback — Missed alerts log
+If all tiers fail:
 1. Log alert content to `.make/logs/missed-alerts.md`
-2. Surface to user in conversation: "I tried to send a Telegram alert but the Telnyx
-   MCP is not connected. Here's what I would have sent: [message]"
+2. Surface to user in conversation: "I tried to send an alert but all channels failed.
+   Here's what I would have sent: [message]"
 
-## Environment Variables Required
+## Environment Variables
 
-- `TELNYX_API_KEY` — Telnyx API key
-- `TELEGRAM_CHAT_ID` — Destination Telegram chat ID
+- `TELNYX_API_KEY` — Telnyx API key (required for all tiers)
+- `TELEGRAM_CHAT_ID` — Destination Telegram chat ID (Tier 1)
+- `TELNYX_ALERT_PHONE` — Phone number for SMS/voice alerts (Tier 2/3) — format: +15141234567
 
-If either is missing, skip alert send and log to missed-alerts.md.
+If `TELNYX_API_KEY` is missing: skip all tiers, log to missed-alerts.md.
 
 ## Rate Limiting
 
-Do not send more than 5 alerts per 15-minute window to avoid Telegram flooding.
+Do not send more than 5 alerts per 15-minute window to avoid flooding.
 If threshold exceeded: batch remaining alerts into a single summary message.
+Voice calls: maximum 1 per hour regardless of failure count.
