@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0] — 2026-06-12
+
+### Features
+- v1.1.0 — memory system, personas, infrastructure skills, kickstart artifacts
+- auto-bump version on every commit via pre-commit hook
+
+
 ## [1.0.1] — 2026-06-12
 
 ### Features
