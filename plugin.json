@@ -1,6 +1,6 @@
 {
   "name": "make-automation-specialist",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Claude Code plugin that turns any project into an intelligent Make.com automation workspace. Conversational automation building, scenario auditing, compliance assessment, and observability.",
   "author": "pmcardinal",
   "license": "MIT",
