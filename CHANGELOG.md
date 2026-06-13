@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.6.0] — 2026-06-12
+
+### Features
+- add formula-expert/error-handler refs to orchestrator; expand alert-dispatcher to 3-tier
+
+
 ## [1.5.2] — 2026-06-12
 
 
