@@ -69,6 +69,38 @@ For each automation the user describes, collect:
 | `frequency` | "How often does this run?" | Yes |
 | `error_pref` | "If something goes wrong — log quietly or alert you?" | No (default: log + alert) |
 | `budget` | "Any monthly cost limit to stay within?" | No |
+| `ai_required` | Detected automatically (see AI Detection below) | Auto |
+
+### AI Agent Detection
+
+After collecting `trigger` + `action` + `destination` for each automation,
+scan the user's description for AI signals:
+
+**AI signal phrases:**
+- "AI", "ChatGPT", "Claude", "GPT", "Gemini", "language model", "LLM"
+- "summarize", "classify", "generate text", "write a", "draft a"
+- "decide", "analyze and", "intelligently", "smart", "automatically determine"
+- "extract from", "parse", "understand the meaning", "respond to"
+- "chatbot", "virtual assistant", "AI agent", "autonomous"
+
+**If any signal is detected:**
+1. Set `ai_required: true` on the automation object
+2. Ask one clarifying question:
+   ```
+   It sounds like this automation needs AI to make a decision or generate content.
+   Just to confirm — what should the AI specifically do?
+   (e.g., "classify the email as hot or cold", "write a reply", "extract the invoice total")
+   ```
+3. Record the answer as `ai_task_description`
+4. Do NOT design the AI agent here — that happens in Phase 2 via `ai-agent-designer`
+
+**In the portfolio display**, mark AI automations:
+```
+[2] {title}                             [Medium complexity] [🤖 AI]
+    When {trigger}
+    → AI will: {ai_task_description}
+    → Result goes to: {destination}
+```
 
 After collecting trigger + action + destination, reflect it back:
 ```
@@ -353,9 +385,45 @@ Save to: `.make/context/stack.md`
 
 ---
 
+### Artifact 6 — ai-agents.md (conditional — only if any automation has ai_required: true)
+
+AI agent inventory for the project:
+
+```markdown
+# AI Agent Inventory
+
+**Generated:** {date}
+**Status:** Planned — design happens during System Design phase
+
+## AI Agents in This Project
+
+{for each automation with ai_required: true}
+
+### {auto-id}: {title}
+
+**Task type:** TBD — designed in Phase 2
+**AI task:** {ai_task_description from intake}
+**Trigger:** {trigger}
+**Output destination:** {destination}
+**Complexity estimate:** {Low/Medium/High}
+
+**Design questions for Phase 2:**
+- Which model is most appropriate for this task?
+- Does the AI need tools (CRM lookup, web search, email)?
+- Does it need memory across runs?
+- Single-shot or loop?
+
+**Status:** 📋 Planned
+```
+
+Save to: `.make/context/ai-agents.md`
+Add to stack.md: AI provider(s) as required connections.
+
+---
+
 ### Artifact Generation Summary
 
-After all 5 artifacts are written, confirm to user:
+After all artifacts are written, confirm to user:
 ```
 PROJECT ARTIFACTS GENERATED
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -364,6 +432,8 @@ PROJECT ARTIFACTS GENERATED
 ✅ erd.md           — data flow diagram
 ✅ system-design.md — architecture overview
 ✅ stack.md         — tech requirements checklist
+{if ai_required automations exist:}
+✅ ai-agents.md     — AI agent inventory ({n} AI automations)
 
 All saved to .make/context/
 

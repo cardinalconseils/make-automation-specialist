@@ -117,6 +117,7 @@ artifacts are stored in `.make/context/`:
 - `system-design.md` — architecture overview, trigger inventory, dependencies
 - `stack.md` — required apps, connections, MCPs, API keys
 - `requirements.md` — generated during bootstrap gap analysis
+- `ai-agents.md` — AI agent inventory: models, patterns, prompts, tools, memory strategy (created when any automation requires AI)
 
 Always check these files before designing new automations — they contain the project context.
 
@@ -128,6 +129,8 @@ Always check these files before designing new automations — they contain the p
 | `/factory` | scenario-orchestrator | Full pipeline: kickstart → bootstrap → design → build |
 | `/make` | automation-specialist | Start new automation conversation |
 | `/build` | automation-specialist | Same as /make |
+| `/agent` | ai-agent-builder | Design and build an AI agent in Make.com |
+| `/ai-agent` | ai-agent-builder | Alias for /agent |
 | `/audit` | scenario-auditor | Audit one or all scenarios |
 | `/fix` | scenario-auditor | Fix issues in a scenario |
 | `/plan` | automation-planner | Generate plan without executing |
@@ -136,12 +139,21 @@ Always check these files before designing new automations — they contain the p
 | `/status` | automation-specialist | Show workspace status + recent logs |
 | `/changelog` | automation-specialist | Show fix history for a scenario |
 
+## AI Agent Detection
+
+When a user describes an automation that involves AI/LLM decision-making:
+- Detect signals: "AI", "Claude", "GPT", "summarize", "classify", "generate", "extract", "decide", "chatbot"
+- Route to `ai-agent-builder` agent or invoke `ai-agent-designer` skill during System Design
+- Always call `ai-docs-researcher` before building — never guess model IDs or field names
+- Always call `agent-pattern-library` to select the right pattern before designing the blueprint
+- Include AI token cost estimate alongside Make.com operation cost in every plan
+
 ## MCP Awareness
 
 On session open, check which MCPs are available:
 - `make` MCP present → full functionality
 - `telnyx` MCP present → Telegram alerts enabled
-- `supabase` MCP present → offer persistent storage option
+- `supabase` MCP present → offer persistent storage option + RAG vector storage
 - `n8n` MCP present → offer n8n as fallback for unsupported Make.com use cases
 - `github` MCP present → read project context from repo
 
@@ -161,6 +173,21 @@ Timestamp format for filenames: `YYYY-MM-DD-HHmm` (e.g., `2026-06-09-1430`)
 - Direct — say what you recommend, not just options
 - Honest about limitations ("Make.com doesn't support X natively, but we can work around it by...")
 
+## File Length Rule (Deterministic)
+
+**No file may exceed 100 lines.** This is a hard rule, not a guideline.
+
+When writing or editing any file:
+- Count lines before saving. If the result would exceed 100 lines, split the file first.
+- Split by responsibility: one concern per file (e.g., separate config from logic, separate each skill/agent into its own file).
+- Update any imports or references after splitting.
+
+When editing an existing file that already exceeds 100 lines:
+- Refactor it into smaller files as part of the same task unless the user says otherwise.
+- Never leave a file over 100 lines in a finished state.
+
+This rule applies to: `.js`, `.ts`, `.py`, `.json`, `.yaml`, `.md`, `.sh`, and all other text files in this project.
+
 ## What You Do NOT Do
 
 - Execute anything without approval
@@ -168,3 +195,4 @@ Timestamp format for filenames: `YYYY-MM-DD-HHmm` (e.g., `2026-06-09-1430`)
 - Make assumptions about data sensitivity — always ask
 - Skip writing logs to save time
 - Use raw API error messages in user-facing output — always translate to plain language
+- Write or leave any file over 100 lines

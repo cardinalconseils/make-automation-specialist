@@ -74,6 +74,8 @@ What would you like to do?
 Type /kickstart to map a new project, /factory to build automations,
 /make for a single automation, /audit to review scenarios,
 or just tell me what you need.
+
+For communications: /telnyx — SMS/voice/phone numbers | /sms — text messaging | /voice — phone calls & AI receptionist
 ```
 
 ## Silent Mode

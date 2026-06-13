@@ -27,9 +27,34 @@ Identify:
 - **Actions:** What happens at the end (send, write, notify)?
 - **Volume:** Estimated runs per day/month
 
-### 2. Select Make.com Modules
+### 2. Detect AI Requirements
 
-For each identified step, follow this selection hierarchy — in order, no skipping:
+Before selecting modules, check if the automation requires AI:
+- Is there an `ai_required: true` flag in the input?
+- Does the business requirement contain AI signal phrases?
+- Is there an AI Agent Blueprint from `ai-agent-designer`?
+
+**If AI is required:**
+1. Load the AI Agent Blueprint from `ai-agent-designer` output (or call the skill now)
+2. Load the pattern from `agent-pattern-library`
+3. Look up exact module specs via `ai-docs-researcher`
+4. Incorporate the AI steps into the module sequence below
+5. Add AI token cost to the cost estimate (in addition to Make.com operations)
+
+**AI-specific module selection hierarchy** (for AI steps only):
+
+1. **Native Make.com AI module** — check for Anthropic, OpenAI, Google AI modules first
+2. **OpenAI-compatible HTTP call** — if provider has no native module but is OpenAI-compatible
+3. **HTTP module with custom auth** — absolute last resort, document clearly
+
+For the AI module, always call `ai-docs-researcher` before writing the blueprint.
+Never guess model IDs or field names for AI modules.
+
+---
+
+### 3. Select Make.com Modules (Non-AI Steps)
+
+For each non-AI step, follow this selection hierarchy — in order, no skipping:
 
 1. **Native Make.com app module** — always check first. Call `apps_recommend` then `app-modules_list` for every service involved.
 2. **Composio connector** — if no native module exists, check if Composio covers it (Composio MCP available). Composio provides 250+ app connectors and handles OAuth automatically.

@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.5.1] — 2026-06-12
+
+### Fixes
+- version bump, update checks, CHANGELOG, and README install instructions
+
+### Other
+- Merge pull request #1 from cardinalconseils/release/v1.0.1
+
+
 ## [1.4.0] — 2026-06-12
 
 ### Features

@@ -226,6 +226,86 @@ Outcome: {approved | refused | blocked-wrong-phase | cancelled}
 
 ---
 
+---
+
+## Telnyx MCP Tool Classification
+
+The same gate system applies to all `mcp__telnyx__*` tools.
+
+### SAFE — Read-only, no cost (no gate)
+```
+list_phone_numbers          get_phone_number
+list_messaging_profiles     get_messaging_profile
+list_connections            get_connection
+list_call_control_applications  get_call_control_application
+list_assistants             get_assistant             get_assistant_texml
+list_integration_secrets    get_message
+get_webhook_events
+cloud_storage_list_buckets  cloud_storage_list_objects  cloud_storage_get_bucket_location
+cloud_storage_download_file list_embedded_buckets
+list_available_phone_numbers
+open_voice_monitor          open_usage_cost_explorer    open_number_intelligence
+list_api_endpoints          get_api_endpoint_schema
+```
+
+### LEVEL 1 — Reversible writes (standard approval gate)
+```
+create_messaging_profile      update_messaging_profile
+create_call_control_application
+update_connection
+create_integration_secret     delete_integration_secret
+cloud_storage_create_bucket   cloud_storage_upload_file   cloud_storage_delete_object
+update_phone_number_messaging_settings
+```
+
+### LEVEL 2 — Real-world effect: sends real SMS or makes live calls (strong gate)
+Always show recipient/number, estimated cost, and require "send it":
+
+```
+TELNYX LEVEL 2 — REAL-WORLD ACTION
+─────────────────────────────────────
+Action:        {e.g., Send SMS}
+To:            {recipient phone number}
+From:          {your Telnyx number}
+Message/Call:  {message text or call purpose}
+Estimated cost: ~{$X.XXX per message/minute}
+
+This will {send a real SMS / initiate a live phone call}.
+Type "send it" to confirm.
+─────────────────────────────────────
+```
+
+Tools in this tier:
+```
+send_message          make_call             start_assistant_call
+speak                 playback_start        playback_stop
+transfer              send_dtmf
+update_phone_number   update_assistant
+```
+
+Valid approval phrase: **"send it"** only.
+
+### LEVEL 3 — Destructive or irreversible (highest gate)
+```
+mcp__telnyx__mcp_telnyx_delete_assistant   — permanently deletes AI assistant
+hangup                                      — ends live call (irreversible)
+initiate_phone_number_order                 — purchases number (billing starts, may be non-refundable)
+```
+
+Gate format:
+```
+TELNYX LEVEL 3 — DESTRUCTIVE ACTION
+──────────────────────────────────────
+Action:   {action description}
+Warning:  {what makes this irreversible}
+Cost:     {monthly/one-time charge if applicable}
+
+Type "send it" to confirm this irreversible action.
+──────────────────────────────────────
+```
+
+---
+
 ## Enforcement Scope
 
 This hook applies to ALL agents, skills, and commands:
@@ -234,7 +314,8 @@ This hook applies to ALL agents, skills, and commands:
 - `scenario-auditor`
 - `automation-planner`
 - `scenario-reporter`
-- All skills (plan-builder, sprint-runner, kickstart-intake, etc.)
-- All commands (/make, /factory, /audit, /fix, /plan)
+- `telnyx-agent`
+- All skills (plan-builder, sprint-runner, kickstart-intake, telnyx-expert, etc.)
+- All commands (/make, /factory, /audit, /fix, /plan, /telnyx, /sms, /voice)
 
 No agent or skill can bypass this hook. No exceptions.

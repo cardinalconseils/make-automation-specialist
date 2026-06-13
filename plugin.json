@@ -1,6 +1,6 @@
 {
   "name": "make-automation-specialist",
-  "version": "1.4.0",
+  "version": "1.5.1",
   "description": "Claude Code plugin that turns any project into an intelligent Make.com automation workspace. Conversational automation building, scenario auditing, compliance assessment, and observability.",
   "author": "pmcardinal",
   "license": "MIT",
@@ -22,6 +22,7 @@
     ],
     "optional": [
       "TELNYX_API_KEY",
+      "TELNYX_ALERT_PHONE",
       "TELEGRAM_CHAT_ID",
       "SUPABASE_URL",
       "SUPABASE_KEY",
@@ -79,6 +80,28 @@
       "triggers": [
         "slash:diagram",
         "slash:report"
+      ]
+    },
+    {
+      "id": "ai-agent-builder",
+      "name": "AI Agent Builder",
+      "file": "agents/ai-agent-builder.md",
+      "description": "Designs and builds AI-powered agents inside Make.com scenarios. Guides model selection, tool inventory, memory strategy, and pattern choice — then produces a validated blueprint and builds with full approval gates.",
+      "triggers": [
+        "slash:agent",
+        "slash:ai-agent",
+        "slash:ai"
+      ]
+    },
+    {
+      "id": "telnyx-agent",
+      "name": "Telnyx Communications Specialist",
+      "file": "agents/telnyx-agent.md",
+      "description": "Handles all SMS, voice, SIP trunking, AI assistants, WebRTC, phone number management, and Telnyx platform configuration. Activated by /telnyx, /sms, /voice or routed from automation-specialist.",
+      "triggers": [
+        "slash:telnyx",
+        "slash:sms",
+        "slash:voice"
       ]
     }
   ],
@@ -162,6 +185,38 @@
     {
       "id": "persona-technical-writer",
       "file": "skills/personas/technical-writer.md"
+    },
+    {
+      "id": "ai-agent-designer",
+      "file": "skills/ai-agent-designer/SKILL.md"
+    },
+    {
+      "id": "ai-docs-researcher",
+      "file": "skills/ai-docs-researcher/SKILL.md"
+    },
+    {
+      "id": "agent-pattern-library",
+      "file": "skills/agent-pattern-library/SKILL.md"
+    },
+    {
+      "id": "docs-researcher",
+      "file": "skills/docs-researcher/SKILL.md"
+    },
+    {
+      "id": "formula-expert",
+      "file": "skills/formula-expert/SKILL.md"
+    },
+    {
+      "id": "error-handler",
+      "file": "skills/error-handler/SKILL.md"
+    },
+    {
+      "id": "telnyx-expert",
+      "file": "skills/telnyx-expert/SKILL.md"
+    },
+    {
+      "id": "persona-telnyx-consultant",
+      "file": "skills/personas/telnyx-consultant.md"
     }
   ],
   "hooks": [
@@ -194,6 +249,12 @@
       "file": "hooks/on-session-end.md",
       "event": "session.stop",
       "description": "Writes session memory snapshot and appends decisions/gotchas to persistent memory files."
+    },
+    {
+      "id": "on-sms-voice-context",
+      "file": "hooks/on-sms-voice-context.md",
+      "event": "before.agent.respond",
+      "description": "Detects SMS, voice, and Telnyx-specific keywords in user messages and routes to telnyx-agent. Ignores Telegram-only context."
     }
   ],
   "output": {
@@ -210,7 +271,8 @@
       "context",
       "memory",
       "memory/sessions",
-      "mcp-servers"
+      "mcp-servers",
+      "context/ai-agents"
     ]
   }
 }

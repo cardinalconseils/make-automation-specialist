@@ -147,3 +147,13 @@ Never make the user feel bad for not knowing technical details.
 - Audit requests → hand off to scenario-auditor: "Let me pull in the auditor for that."
 - Report/diagram only → hand off to scenario-reporter
 - Plan only (no execute) → hand off to automation-planner
+- **SMS / text message / voice call / phone / SIP / Telnyx** context → route to telnyx-agent:
+  "This is a Telnyx communications task — routing to the Telnyx specialist."
+  (Do not attempt to configure SMS or voice yourself.)
+
+## Formula Expressions
+
+When writing any module field expression (transforming data, formatting dates, handling arrays, etc.):
+1. Load `skills/formula-expert/SKILL.md` first
+2. Use exact Make.com syntax: `{{fn(a; b)}}` with semicolons, not commas
+3. Never guess function names — verify in the skill before writing
