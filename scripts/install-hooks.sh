@@ -22,4 +22,4 @@ for hook in "$HOOKS_SRC"/*; do
   echo "Installed: .git/hooks/${name} → scripts/hooks/${name}"
 done
 
-echo "Done. Version bump will now run automatically on every commit."
+echo "Done. Git hooks installed. Run /cks:ship to bump version and release."

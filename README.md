@@ -20,13 +20,13 @@ A Claude Code plugin that turns any project into an intelligent Make.com automat
 Run this command once to install the plugin for all your projects:
 
 ```bash
-claude plugin install /Users/pmc/Documents/DEV/make.com --scope user
+claude plugin install make-automation-specialist@make-automation-specialist --scope user
 ```
 
 Or install it only for one specific project (run from inside that project):
 
 ```bash
-claude plugin install /Users/pmc/Documents/DEV/make.com --scope project
+claude plugin install make-automation-specialist@make-automation-specialist --scope project
 ```
 
 To verify it installed:
@@ -36,6 +36,13 @@ claude plugin list
 ```
 
 You should see `make-automation-specialist` in the list.
+
+> **Note:** The first time you install, Claude Code needs to know where to find this plugin's marketplace. Add this to your `~/.claude/settings.json` under `extraKnownMarketplaces`:
+> ```json
+> "make-automation-specialist": {
+>   "source": { "source": "github", "repo": "cardinalconseils/make-automation-specialist" }
+> }
+> ```
 
 ---
 

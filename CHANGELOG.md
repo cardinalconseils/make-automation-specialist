@@ -1,19 +1,17 @@
 # Changelog
 
-## [1.3.0] — 2026-06-12
+## [1.4.0] — 2026-06-12
 
 ### Features
-- v1.1.0 — memory system, personas, infrastructure skills, kickstart artifacts
-- auto-bump version on every commit via pre-commit hook
+- Plugin now installable from GitHub via `claude plugin install make-automation-specialist@make-automation-specialist`
+- Added `extraKnownMarketplaces` support for remote install without cloning
 
-
-## [1.0.1] — 2026-06-12
-
-### Features
-- Add docs-researcher skill and wire into system design protocol
+### Fixes
+- Version bump now syncs both `plugin.json` and `.claude-plugin/plugin.json` so update checks work correctly
+- Removed pre-commit auto-bump that was causing double version increments on every ship
 
 ### Maintenance
-- Release v1.0.1
+- README updated with correct remote install command and marketplace registration instructions
 
 ## [1.0.0] — 2026-06-09
 
