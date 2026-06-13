@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.7.0] — 2026-06-12
+
+### Features
+- port Claude-Starter hardening patterns — rules, hooks, skills, agent, smoke-test
+
+
 ## [1.6.0] — 2026-06-12
 
 ### Features

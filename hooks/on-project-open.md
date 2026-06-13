@@ -82,3 +82,16 @@ For communications: /telnyx — SMS/voice/phone numbers | /sms — text messagin
 
 If workspace discovery was already fresh (< 24 hours old) and no pending items,
 just display the brief greeting. No verbose output unless something needs attention.
+
+---
+
+## Peers Coordination
+
+After displaying the greeting, announce this session to other Claude Code peers:
+
+```
+mcp__claude-peers__set_summary — "Make.com Automation Specialist | Project: {domain} | {active scenario count} scenarios"
+```
+
+This lets other sessions (running `/audit`, `/factory`, etc.) see that this session
+is active. If peers MCP is not available, skip silently.

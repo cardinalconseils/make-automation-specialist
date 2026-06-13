@@ -1,3 +1,9 @@
+---
+name: telnyx-expert
+description: "Telnyx platform expertise — SMS, voice, SIP, AI assistants, WebRTC, phone number management"
+allowed-tools: Read, Grep, Glob
+---
+
 # Telnyx Expert Skill
 
 Load this skill when any conversation involves SMS, voice calls, phone numbers, SIP,
