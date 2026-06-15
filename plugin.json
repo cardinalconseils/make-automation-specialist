@@ -1,6 +1,6 @@
 {
   "name": "make-automation-specialist",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "Claude Code plugin that turns any project into an intelligent Make.com automation workspace. Conversational automation building, scenario auditing, compliance assessment, and observability.",
   "author": "pmcardinal",
   "license": "MIT",
@@ -345,19 +345,25 @@
       "id": "diagnose",
       "file": "commands/diagnose.md",
       "description": "Diagnose a Make.com failure using taxonomy-first protocol.",
-      "triggers": ["slash:diagnose"]
+      "triggers": [
+        "slash:diagnose"
+      ]
     },
     {
       "id": "blueprint-review",
       "file": "commands/blueprint-review.md",
       "description": "Review a Make.com blueprint JSON for issues before pushing.",
-      "triggers": ["slash:blueprint-review"]
+      "triggers": [
+        "slash:blueprint-review"
+      ]
     },
     {
       "id": "taxonomy",
       "file": "commands/taxonomy.md",
       "description": "View, search, or update the Make Failure Taxonomy.",
-      "triggers": ["slash:taxonomy"]
+      "triggers": [
+        "slash:taxonomy"
+      ]
     }
   ],
   "taxonomy": {

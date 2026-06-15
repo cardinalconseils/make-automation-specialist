@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.9.0] — 2026-06-15
+
+### Features
+- wire failure taxonomy system into agentic workflow
+
+
 ## [1.8.0] — 2026-06-15
 
 ### Features
