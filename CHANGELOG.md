@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.8.0] — 2026-06-15
+
+### Features
+- **Make Failure Taxonomy** — `taxonomy/make-failure-taxonomy.md` — 30+ classified failure patterns across 12 categories (HTTP, MAKE engine, CONN, DATA, TRIG, RATE, EXEC, ROUTER, ITER, BLUEPRINT, APP, PATTERN)
+- **`failure-diagnostician` agent** — taxonomy-first diagnosis: classify → cite → fix → explain
+- **`taxonomy-curator` agent** — add, merge, audit taxonomy entries
+- **`failure-diagnostician` skill** — quick-lookup table + diagnosis protocol
+- **`blueprint-review` skill** — 7-point pre-push blueprint validation checklist
+- **`taxonomy-updater` skill** — guided entry creation with format enforcement
+- **`failure-patterns` skill** — 8 cross-cutting failure patterns with prevention checklists
+- **`on-error-classify` hook** — deterministic: auto-classifies Make errors in context before agent responds
+- **`/diagnose` command** — dispatch failure diagnostician
+- **`/blueprint-review` command** — pre-push blueprint audit
+- **`/taxonomy` command** — view, search, add, audit taxonomy
+- **`failure-taxonomy-protocol` rule** — enforces taxonomy-first behavior across all agents
+
 ## [1.7.0] — 2026-06-12
 
 ### Features

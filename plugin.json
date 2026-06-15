@@ -1,6 +1,6 @@
 {
   "name": "make-automation-specialist",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Claude Code plugin that turns any project into an intelligent Make.com automation workspace. Conversational automation building, scenario auditing, compliance assessment, and observability.",
   "author": "pmcardinal",
   "license": "MIT",
@@ -111,6 +111,25 @@
       "description": "Researches Make.com integrations before building — checks native app support, API docs, rate limits, webhook availability, and known gotchas.",
       "triggers": [
         "slash:research"
+      ]
+    },
+    {
+      "id": "failure-diagnostician",
+      "name": "Failure Diagnostician",
+      "file": "agents/failure-diagnostician.md",
+      "description": "Taxonomy-first failure diagnosis. Loads the failure taxonomy, classifies errors by pattern code, states expected vs actual behavior, and prescribes the exact fix.",
+      "triggers": [
+        "slash:diagnose",
+        "slash:fix"
+      ]
+    },
+    {
+      "id": "taxonomy-curator",
+      "name": "Taxonomy Curator",
+      "file": "agents/taxonomy-curator.md",
+      "description": "Maintains the Make Failure Taxonomy. Adds new patterns, merges duplicates, updates stale entries, and audits format consistency.",
+      "triggers": [
+        "slash:taxonomy"
       ]
     }
   ],
@@ -234,6 +253,22 @@
     {
       "id": "anti-patterns",
       "file": "skills/anti-patterns/SKILL.md"
+    },
+    {
+      "id": "failure-diagnostician",
+      "file": "skills/failure-diagnostician/SKILL.md"
+    },
+    {
+      "id": "blueprint-review",
+      "file": "skills/blueprint-review/SKILL.md"
+    },
+    {
+      "id": "taxonomy-updater",
+      "file": "skills/taxonomy-updater/SKILL.md"
+    },
+    {
+      "id": "failure-patterns",
+      "file": "skills/failure-patterns/SKILL.md"
     }
   ],
   "hooks": [
@@ -278,6 +313,12 @@
       "file": "hooks/on-pre-compact.md",
       "event": "pre.compact",
       "description": "Saves workspace snapshot before context compaction so no active work context is lost."
+    },
+    {
+      "id": "on-error-classify",
+      "file": "hooks/on-error-classify.md",
+      "event": "before.agent.respond",
+      "description": "Deterministic error classifier. Detects Make error patterns in context and prepends taxonomy code(s) so the agent always consults the taxonomy before responding."
     }
   ],
   "output": {
@@ -298,5 +339,29 @@
       "context/ai-agents",
       "research"
     ]
+  },
+  "commands": [
+    {
+      "id": "diagnose",
+      "file": "commands/diagnose.md",
+      "description": "Diagnose a Make.com failure using taxonomy-first protocol.",
+      "triggers": ["slash:diagnose"]
+    },
+    {
+      "id": "blueprint-review",
+      "file": "commands/blueprint-review.md",
+      "description": "Review a Make.com blueprint JSON for issues before pushing.",
+      "triggers": ["slash:blueprint-review"]
+    },
+    {
+      "id": "taxonomy",
+      "file": "commands/taxonomy.md",
+      "description": "View, search, or update the Make Failure Taxonomy.",
+      "triggers": ["slash:taxonomy"]
+    }
+  ],
+  "taxonomy": {
+    "file": "taxonomy/make-failure-taxonomy.md",
+    "description": "Make.com failure pattern taxonomy — authoritative source of truth for all error diagnosis."
   }
 }
