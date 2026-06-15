@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.10.0] — 2026-06-15
+
+### Features
+- `/make:version` command (`commands/version.md`) — show installed vs latest plugin version, detect staleness, surface upgrade path
+- `/make:migrate` command (`commands/migrate.md`) — detect version gap, show CHANGELOG entries for missed releases, guide upgrade
+- `commands/status.md` — wired plugin version line into status output
+- `scripts/bump-version.sh` — added post-release checklist (update instructions + in-project verification step)
+
 ## [1.9.0] — 2026-06-15
 
 ### Features

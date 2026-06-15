@@ -21,6 +21,8 @@ Read-only. No approval needed. All deterministic tool calls.
    - `.make/audits/` — last audit report date
    - `.make/plans/` — any pending (unapproved) plans
    - `.make/logs/approvals.md` — recent approvals
+   - `~/.claude/plugins/installed_plugins.json` → `make-automation-specialist` entry for installed version
+   - `{installPath}/plugin.json` → `version` for latest on-disk version
 
 3. Display dashboard:
 
@@ -30,6 +32,7 @@ MAKE.COM WORKSPACE STATUS
 Team:     {team name}
 User:     {name}
 Zone:     {zone}
+Plugin:   make-automation-specialist v{installed version}  {✅ latest / ⚠️ v{latest} available — run /make:migrate}
 
 SCENARIOS
   Active:   {n}

@@ -1,6 +1,6 @@
 {
   "name": "make-automation-specialist",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "description": "Claude Code plugin that turns any project into an intelligent Make.com automation workspace. Conversational automation building, scenario auditing, compliance assessment, and observability.",
   "author": "pmcardinal",
   "license": "MIT",
@@ -363,6 +363,24 @@
       "description": "View, search, or update the Make Failure Taxonomy.",
       "triggers": [
         "slash:taxonomy"
+      ]
+    },
+    {
+      "id": "version",
+      "file": "commands/version.md",
+      "description": "Show installed vs latest plugin version, detect staleness, and surface the upgrade path.",
+      "triggers": [
+        "slash:make:version",
+        "slash:version"
+      ]
+    },
+    {
+      "id": "migrate",
+      "file": "commands/migrate.md",
+      "description": "Detect version gap, show CHANGELOG entries for missed releases, and guide the upgrade.",
+      "triggers": [
+        "slash:make:migrate",
+        "slash:migrate"
       ]
     }
   ],
