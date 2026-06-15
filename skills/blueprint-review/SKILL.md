@@ -71,3 +71,10 @@ Review a Make.com blueprint JSON before pushing it via the API. Catch structural
 ## After Review
 If issues found → fix before calling `mcp__claude_ai_Make__scenarios_update`.
 If clean → proceed and check `"isinvalid": false` in response.
+
+## Escalation
+
+If an issue in the blueprint is not directly fixable (unknown root cause, connection account mismatch, obscure mapper behavior):
+- Load `skills/failure-diagnostician/SKILL.md` — classify the issue against the taxonomy
+- If it matches a known pattern: cite the code and apply the taxonomy fix
+- If it's a new pattern: flag it and route to taxonomy-curator agent

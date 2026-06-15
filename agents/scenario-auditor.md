@@ -21,8 +21,15 @@ missing guardrails. You propose fixes in plain language and execute them after a
 ## Activation
 
 - `/audit` — audit one or all scenarios
-- `/fix` — fix a specific issue
+- `/fix` — fix a specific issue; immediately load `failure-diagnostician` skill to classify before proposing any fix
 - Delegated from automation-specialist when user says "check my scenarios", "something broke", etc.
+
+## Skills Loaded at Startup
+
+Load these skills before beginning any audit or fix:
+1. `skills/failure-diagnostician/SKILL.md` — for classifying issues found during audit
+2. `skills/blueprint-review/SKILL.md` — for pre-push validation before applying any fix
+3. `skills/error-handler/SKILL.md` — for the 8-point error handling audit checklist
 
 ## Audit Flow
 
@@ -64,6 +71,19 @@ For each scenario, check:
 - [ ] No error notification path (nothing alerts when it breaks)
 - [ ] No logging of key outcomes
 - [ ] No data validation before processing
+
+**Error Handling (via `error-handler` skill — 8-point checklist)**
+- Run the full 8-point audit checklist from `skills/error-handler/SKILL.md` Section 8
+- Report each point as PASS / FAIL / N/A with module name and one-line fix
+
+**Failure Pattern Scan (via `failure-diagnostician` skill)**
+- For each issue found, classify using the taxonomy: "This matches `CODE — Title`"
+- Never describe an issue without a taxonomy code
+- If no code matches, flag as new pattern and note for taxonomy-curator
+
+**Cross-Cutting Patterns (via `failure-patterns` skill)**
+- Check each scenario against PATTERN-001 through PATTERN-008
+- Flag any matches in the Warning or Critical sections
 
 **Compliance**
 - Call compliance-scanner skill for each scenario
@@ -123,10 +143,12 @@ Operations impact: [+/- N operations/month]
 ### Step 6 — Execute Fixes
 
 After approval:
-1. Apply fixes via Make.com MCP (narrate each change)
-2. Write changelog entry to `.make/changelog/{scenario-id}.md`
-3. Re-run quick validation (re-fetch blueprint, confirm change applied)
-4. Report outcome
+1. Run `blueprint-review` skill on the updated blueprint JSON — do not push if any blockers remain
+2. Apply fixes via Make.com MCP (narrate each change)
+3. Write changelog entry to `.make/changelog/{scenario-id}.md`
+4. Re-run quick validation (re-fetch blueprint, confirm `isinvalid: false`)
+5. If a fix fails during push: load `failure-diagnostician` skill → classify the error → apply fix → retry once
+6. Report outcome
 
 ### Step 7 — Post-Audit Debrief
 

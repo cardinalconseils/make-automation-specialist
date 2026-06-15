@@ -105,11 +105,16 @@ Call the automation-planner agent to generate the AutomationPlan, then:
 
 After "approve" or equivalent:
 1. Write plan to `.make/plans/{timestamp}-{slug}.md`
-2. Call Make.com MCP to create scenario (narrate each step)
-3. Handle errors with auto-retry (max 2 attempts)
-4. If unresolvable: call alert-dispatcher skill, write log, surface to user
-5. On success: write execution log to `.make/logs/`
-6. Report outcome in plain language
+2. Run `blueprint-review` skill on the blueprint JSON before any MCP write — fix all blockers first
+3. Call Make.com MCP to create scenario (narrate each step)
+4. Handle errors with auto-retry (max 2 attempts)
+5. If retry fails:
+   - Load `failure-diagnostician` skill — classify the error against the taxonomy
+   - If taxonomy match found: cite the code, apply the fix, retry once more
+   - If still unresolvable: dispatch `failure-diagnostician` agent for deep diagnosis
+   - Call `alert-dispatcher` skill, write log, surface to user
+6. On success: write execution log to `.make/logs/`
+7. Report outcome in plain language
 
 ### Step 5 — Confirm and Educate
 
@@ -147,6 +152,9 @@ Never make the user feel bad for not knowing technical details.
 - Audit requests → hand off to scenario-auditor: "Let me pull in the auditor for that."
 - Report/diagram only → hand off to scenario-reporter
 - Plan only (no execute) → hand off to automation-planner
+- **Error / failure / "it broke" / "not working"** → immediately load `failure-diagnostician` skill;
+  if diagnosis requires deep investigation, dispatch `failure-diagnostician` agent.
+  Never suggest a fix without first classifying via the skill.
 - **SMS / text message / voice call / phone / SIP / Telnyx** context → route to telnyx-agent:
   "This is a Telnyx communications task — routing to the Telnyx specialist."
   (Do not attempt to configure SMS or voice yourself.)
@@ -157,3 +165,19 @@ When writing any module field expression (transforming data, formatting dates, h
 1. Load `skills/formula-expert/SKILL.md` first
 2. Use exact Make.com syntax: `{{fn(a; b)}}` with semicolons, not commas
 3. Never guess function names — verify in the skill before writing
+
+## Error Classification Protocol
+
+When `on-error-classify` hook has prepended a taxonomy code to context (you will see `[Auto-classified from Make Error Classifier]`):
+1. Acknowledge the classification — do not ignore it
+2. Load `taxonomy/make-failure-taxonomy.md` and look up the cited code(s)
+3. Load `skills/failure-diagnostician/SKILL.md`
+4. Follow the full diagnosis protocol: Expected vs Actual → Root cause → Fix → Why it works
+5. If the error involves retryable codes (429, 5xx): load `skills/error-handler/SKILL.md` and recommend the appropriate directive
+
+## Cross-Cutting Failure Pattern Check
+
+Before finalizing any plan or blueprint:
+1. Load `skills/failure-patterns/SKILL.md`
+2. Check the plan against all 8 PATTERN-xxx codes
+3. Flag any matches and add mitigations to the plan before presenting for approval

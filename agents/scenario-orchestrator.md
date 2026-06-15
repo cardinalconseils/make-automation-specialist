@@ -266,12 +266,14 @@ If NO — proceed directly to step 1.
    - Flag AI provider connection separately (critical prerequisite)
 4. Use plan-builder skill → construct full AutomationPlan
    - Pass AI Agent Blueprint as additional context if `ai_required: true`
-5. Use cost-estimator skill → estimate operations + cost
+5. Use `failure-patterns` skill → check plan against all 8 PATTERN-xxx codes; add mitigations for any matches
+6. Use cost-estimator skill → estimate operations + cost
    - For AI automations: include AI token cost estimate alongside Make.com ops
-6. Use compliance-scanner skill → flag any data privacy issues
-7. Use diagram-generator skill → generate Mermaid flowchart
+7. Use compliance-scanner skill → flag any data privacy issues
+8. Use diagram-generator skill → generate Mermaid flowchart
    - For AI automations: use pattern diagram from `agent-pattern-library` as base
-8. `mcp__claude_ai_Make__validate_blueprint_schema` → pre-validate the blueprint
+9. `mcp__claude_ai_Make__validate_blueprint_schema` → pre-validate the blueprint
+10. Use `blueprint-review` skill → 7-point pre-push checklist; fix all blockers before advancing to Sprint
 
 Save each design to `.make/factory/{session_id}-design-{n}-{slug}.md`.
 
@@ -366,9 +368,11 @@ For each automation (in approved order):
 ```
 
 **Error handling per scenario:**
-- On error: retry once with 30s wait
-- If retry fails: write to `.make/logs/`, skip to next, flag in report
-- If ≥2 consecutive failures: send Telegram alert via `mcp__telnyx__send_message`, pause sprint, surface to user
+- On error: load `failure-diagnostician` skill → classify against taxonomy → cite code → apply taxonomy fix
+- If taxonomy fix resolves: retry once, then continue sprint
+- If retry fails after taxonomy fix: dispatch `failure-diagnostician` agent for deep diagnosis
+- Write classified error to `.make/logs/`, skip to next, flag in report with taxonomy code
+- If ≥2 consecutive failures: send Telegram alert via `mcp__telnyx__send_message`, pause sprint, surface to user with classified error codes
 
 ### Sprint Complete
 

@@ -122,6 +122,13 @@ branching logic, or operations 1000-10000/month.
 with high volume, operations > 10000/month, irreversible actions (send email to
 customer list, delete records, charge payment method).
 
+## Skills Loaded at Startup
+
+Before generating any plan:
+1. `skills/failure-patterns/SKILL.md` — check every design decision against PATTERN-001 through PATTERN-008
+2. `skills/blueprint-review/SKILL.md` — validate blueprint structure before returning plan to calling agent
+3. `skills/error-handler/SKILL.md` — apply correct error handler directive to every module that can fail
+
 ## Module Selection Principles
 
 **Hard rule — selection hierarchy, applied in order:**
@@ -136,6 +143,22 @@ Additional rules:
 - Add filter modules before expensive operations (avoid unnecessary downstream calls)
 - Always include an error handler on every HTTP, API, and file operation module
 - Prefer batch operations over per-item loops when volume > 10 items
+
+## Failure Pattern Review (mandatory before returning plan)
+
+After completing the plan document:
+1. Load `skills/failure-patterns/SKILL.md` if not already loaded
+2. Walk through each PATTERN-xxx check against the plan:
+   - PATTERN-001 (Schema Drift) — any API response fields hardcoded without schema validation?
+   - PATTERN-002 (Eventual Consistency Race) — any read-then-write sequences with no delay/retry?
+   - PATTERN-003 (Webhook Replay) — any webhook trigger without deduplication?
+   - PATTERN-004 (Timezone Mismatch) — any date operations without explicit timezone?
+   - PATTERN-005 (Missing Pagination) — any list/search returning >1 item without pagination loop?
+   - PATTERN-006 (Fire-and-Forget) — any async op assuming success without polling?
+   - PATTERN-007 (Incomplete Execution Queue) — any Break directive without DLQ monitoring?
+   - PATTERN-008 (Shared OAuth Throttle) — any scenarios sharing the same connection that could collude on rate limits?
+3. Add a **Failure Pattern Risks** section to the plan with any matches and mitigations
+4. Run `blueprint-review` skill checklist on the generated blueprint before returning
 
 ## When You Cannot Build a Plan
 
