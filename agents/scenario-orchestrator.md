@@ -93,8 +93,35 @@ you want to map, improve, or debug?
 [2] Existing project — I'll read your current scenarios and reverse-engineer a project map
 ```
 
-- If **[1] New project** → proceed to Opening Interview below.
+- If **[1] New project** → proceed to Gate 0 (direction check) below.
 - If **[2] Existing project** → run `existing-scenario-discovery` skill to fetch and translate live scenarios, then skip directly to Portfolio Review (0c).
+
+### Gate 0 — Direction Check (deterministic, new project only)
+
+**Before the opening interview, detect if the user has an automation direction.**
+
+**Direction present** (has a trigger, action, and destination — proceed to 0b-ii):
+- Provided a seed automation with the command (e.g., `/factory automate our lead intake`)
+- Described a specific automation: trigger + action + destination identifiable
+- Said "I want to automate X" / "I need a scenario that does Y"
+
+**No direction** (has a business pain but no clear automation — route to brainstorm-sharp):
+- "I want to automate something but don't know what"
+- "I need to be more efficient" / "I'm wasting time on [vague area]"
+- "What should I automate?" / "Help me figure out what to build"
+- User input ≤ 2 sentences with no trigger, action, or destination mentioned
+- User describes a business problem without a clear automation solution
+
+→ **If no direction:** Load `brainstorm-sharp` skill. Run it. After direction locked:
+  - **Simple direction** (single trigger → action → destination): proceed directly to 0b-ii
+    (use the locked direction sentence as the kickstart-intake seed)
+  - **Complex direction** (multi-step workflow, unclear data shapes): load
+    `discovery-to-blueprint` skill. Run intake (one question at a time). After blueprint
+    confirmed, feed context into kickstart-intake and proceed to 0c.
+
+→ **If direction present:** Skip brainstorm-sharp. Proceed to 0b-ii immediately.
+
+**This gate is deterministic — no direction = must run brainstorm-sharp. No skip path.**
 
 ### 0b-ii — Opening Interview (new project only)
 
@@ -144,6 +171,36 @@ Does this list look right? Any changes before we map your workspace?
 ```
 
 Save to `.make/factory/{session_id}-kickstart.md` and update `current-session.json`.
+
+### Gate 0c-ii — Stakes Check (deterministic, fires after portfolio confirmed)
+
+**After the user confirms the portfolio, scan it for high-stakes signals:**
+
+- Operations cost: ">$1K/month", "significant budget", "ROI required", "client billing"
+- Commitment: "client contract", "SLA", "production system", "replaces current live process"
+- Scale: "10,000+ records per month", "real users", "live environment", "external clients"
+- Business: "revenue-generating", "compliance-required", "mission-critical", "new service"
+
+**If any signal present → MUST offer council-of-5:**
+
+Load `council-of-5` skill and ask:
+```
+This automation portfolio looks like a significant commitment.
+Before we start building, should 5 critical voices review the plan?
+
+[Yes — run the review (recommended)]
+[Skip — proceed to Bootstrap now]
+```
+
+- If **Yes**: run the full council-of-5 process. After verdict:
+  - **Go / Go with condition**: proceed to Phase 1 Bootstrap (condition logged in session file)
+  - **Pause**: stop; surface the Pause verdict + validation task; do not proceed to Bootstrap
+  - **Pivot**: offer to re-run brainstorm-sharp with the new direction
+- If **Skip**: proceed to Phase 1 Bootstrap immediately
+
+**This offer cannot be silently omitted.** User may Skip — but the question must be asked.
+
+**If no signals present:** skip the council offer. Proceed directly to Phase 1 Bootstrap.
 
 ---
 
