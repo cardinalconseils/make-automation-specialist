@@ -47,7 +47,7 @@
       "id": "scenario-orchestrator",
       "name": "Scenario Orchestrator",
       "file": "agents/scenario-orchestrator.md",
-      "description": "Full-lifecycle orchestrator. Runs Kickstart → Bootstrap → System Design → Sprint to build a portfolio of scenarios in one guided session.",
+      "description": "Full-lifecycle orchestrator. Runs Kickstart \u2192 Bootstrap \u2192 System Design \u2192 Sprint to build a portfolio of scenarios in one guided session.",
       "triggers": [
         "slash:factory",
         "slash:kickstart"
@@ -76,7 +76,7 @@
       "id": "scenario-reporter",
       "name": "Scenario Reporter",
       "file": "agents/scenario-reporter.md",
-      "description": "Generates visual Mermaid flowcharts and written reports for scenarios. Read-only — no MCP writes.",
+      "description": "Generates visual Mermaid flowcharts and written reports for scenarios. Read-only \u2014 no MCP writes.",
       "triggers": [
         "slash:diagram",
         "slash:report"
@@ -86,7 +86,7 @@
       "id": "ai-agent-builder",
       "name": "AI Agent Builder",
       "file": "agents/ai-agent-builder.md",
-      "description": "Designs and builds AI-powered agents inside Make.com scenarios. Guides model selection, tool inventory, memory strategy, and pattern choice — then produces a validated blueprint and builds with full approval gates.",
+      "description": "Designs and builds AI-powered agents inside Make.com scenarios. Guides model selection, tool inventory, memory strategy, and pattern choice \u2014 then produces a validated blueprint and builds with full approval gates.",
       "triggers": [
         "slash:agent",
         "slash:ai-agent",
@@ -108,7 +108,7 @@
       "id": "deep-researcher",
       "name": "Integration Researcher",
       "file": "agents/deep-researcher.md",
-      "description": "Researches Make.com integrations before building — checks native app support, API docs, rate limits, webhook availability, and known gotchas.",
+      "description": "Researches Make.com integrations before building \u2014 checks native app support, API docs, rate limits, webhook availability, and known gotchas.",
       "triggers": [
         "slash:research"
       ]
@@ -269,6 +269,18 @@
     {
       "id": "failure-patterns",
       "file": "skills/failure-patterns/SKILL.md"
+    },
+    {
+      "id": "brainstorm-sharp",
+      "file": "skills/brainstorm-sharp/SKILL.md"
+    },
+    {
+      "id": "discovery-to-blueprint",
+      "file": "skills/discovery-to-blueprint/SKILL.md"
+    },
+    {
+      "id": "council-of-5",
+      "file": "skills/council-of-5/SKILL.md"
     }
   ],
   "hooks": [
