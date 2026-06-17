@@ -119,19 +119,59 @@ That's it. The `on-project-open` hook runs automatically and:
 
 ---
 
-## How to use it
+## Commands
 
-Once set up, just talk to Claude naturally. Or use these slash commands:
+### Build
 
 | Command | What it does |
-|---------|--------------|
-| `/make` | Start a conversation to build a new automation |
-| `/build` | Same as `/make` |
-| `/audit` | Analyze your existing Make.com scenarios for issues |
-| `/fix` | Find and fix a specific scenario |
-| `/plan` | Generate an automation plan without executing anything |
-| `/diagram` | Create a visual flowchart of a scenario |
-| `/report` | Generate a written report of a scenario |
+|---------|-------------|
+| `/make [description]` | Start an automation conversation. Discovers your workspace, designs the scenario, gets your approval, then builds it. |
+| `/build [description]` | Alias for `/make`. |
+| `/plan [description]` | Generate a detailed plan with cost estimate, risk level, and Mermaid diagram — without building anything. |
+| `/factory [idea]` | Full automation factory: Kickstart → Bootstrap → System Design → Sprint. Design your entire automation portfolio in one session, then build them all. |
+| `/kickstart [idea]` | Discovery only — guided interview + context artifacts. Does not build. |
+| `/agent [description]` | Design and build an AI-powered agent inside a Make.com scenario. Guides model selection, tool inventory, and memory strategy. |
+
+### Audit & Fix
+
+| Command | What it does |
+|---------|-------------|
+| `/audit [scenario]` | Audit scenarios for errors, missing error handlers, inefficiencies, compliance risks, and cost issues. Proposes ranked fixes, executes after approval. Omit argument for full workspace audit. |
+| `/fix [issue]` | Target a specific issue. Classifies via failure taxonomy before proposing any fix. |
+| `/diagnose [error]` | Taxonomy-first diagnosis. Classifies the error by pattern code, states expected vs actual, prescribes the fix. |
+| `/blueprint-review` | 7-point pre-push review of a blueprint JSON before sending to Make.com API. |
+
+### Research & Report
+
+| Command | What it does |
+|---------|-------------|
+| `/research [service]` | Research an integration before building — native app availability, API docs, rate limits, webhook support, known gotchas. |
+| `/diagram [scenario]` | Generate a Mermaid flowchart for a scenario. Read-only. |
+| `/report [scenario]` | Generate a plain-language report: data flow, performance stats, observations. Read-only. |
+
+### Telnyx / Communications
+
+| Command | What it does |
+|---------|-------------|
+| `/telnyx [task]` | Full Telnyx platform management — phone numbers, connections, AI assistants, call control apps. |
+| `/sms [task]` | SMS setup, troubleshooting, and compliance via Telnyx. |
+| `/voice [task]` | Voice calls, IVR, AI receptionist, SIP trunking via Telnyx. |
+
+### Taxonomy
+
+| Command | What it does |
+|---------|-------------|
+| `/taxonomy` | View, search, or update the Make Failure Taxonomy (80+ patterns, 12 categories). |
+
+### Workspace & Plugin
+
+| Command | What it does |
+|---------|-------------|
+| `/status` | Live workspace dashboard — scenarios, operations usage, connections, recent runs, pending plans, last audit, plugin version. |
+| `/make:version` | Show installed vs latest plugin version. Flags staleness with the upgrade command. |
+| `/make:migrate` | Detect version gap, show CHANGELOG for every missed release, run the update. |
+
+---
 
 **Example conversations:**
 
@@ -140,6 +180,8 @@ Once set up, just talk to Claude naturally. Or use these slash commands:
 > "Audit all my Make.com scenarios and tell me what could break"
 
 > "Build me an AI agent that summarizes my Gmail emails every morning"
+
+> "My Google Sheets module is failing with 403 — what's wrong?"
 
 ---
 
@@ -156,6 +198,8 @@ Everything goes into the `.make/` folder inside your project:
   audits/      ← Audit reports from /audit runs
   compliance/  ← Compliance scan results
   diagrams/    ← Mermaid flowcharts
+  memory/      ← Persistent session memory
+  research/    ← Integration research notes
 ```
 
 ---
@@ -175,27 +219,40 @@ The plugin works without these, but they unlock more capabilities:
 ## Plugin structure (for the curious)
 
 ```
-plugin.json              ← Plugin manifest
-CLAUDE.md                ← Behavior rules loaded in every session
+plugin.json              ← Plugin manifest (version bumped by scripts/bump-version.sh)
+CHANGELOG.md             ← Full release history (read by /make:migrate)
 agents/
   automation-specialist  ← Main agent (conversation → plan → build)
+  scenario-orchestrator  ← Portfolio factory (Kickstart → Sprint)
   scenario-auditor       ← Audit + fix existing scenarios
-  automation-planner     ← Plan generation only (no execution)
+  automation-planner     ← Plan generation only, never executes
   scenario-reporter      ← Diagrams and reports (read-only)
+  ai-agent-builder       ← Design AI agents inside Make.com
+  failure-diagnostician  ← Taxonomy-first error diagnosis
+  taxonomy-curator       ← Maintain and extend the failure taxonomy
+  telnyx-agent           ← Telnyx communications specialist
+  deep-researcher        ← Pre-build integration research
 skills/
-  project-discoverer     ← First-run workspace mapping
-  plan-builder           ← Maps requirements to Make.com modules
-  scenario-reader        ← Parses blueprints, detects 15+ issue types
-  diagram-generator      ← Mermaid flowchart builder
+  failure-diagnostician  ← Loaded by all agents on error paths
+  failure-patterns       ← PATTERN-001..008 cross-cutting checks
+  blueprint-review       ← 7-point pre-push checklist
+  error-handler          ← 5 Make error directives + 8-point audit
+  taxonomy-updater       ← Add new patterns to the taxonomy
+  formula-expert         ← Make formula syntax reference
   compliance-scanner     ← GDPR, Quebec Law 25, PCI-DSS, HIPAA
   cost-estimator         ← Operation counts and API cost estimates
-  alert-dispatcher       ← Telegram alerts via Telnyx
-  execution-logger       ← Audit trail and changelog writer
+  diagram-generator      ← Mermaid flowchart builder
+  (+ 15 more skills)
 hooks/
-  on-project-open        ← Auto-runs on session start
-  pre-execute            ← Approval gate (nothing executes without your OK)
+  on-project-open        ← Auto-runs on session start, maps workspace
+  pre-execute            ← Approval gate — nothing executes without OK
   post-execute           ← Logs results, sends alerts on failure
-  on-error               ← 3-tier auto-recovery
+  on-error               ← Auto-recovery attempt + Telegram alert
+  on-error-classify      ← Prepends taxonomy code to context on error
+  on-sms-voice-context   ← Routes SMS/voice keywords to telnyx-agent
+  on-pre-compact         ← Saves workspace snapshot before compaction
+taxonomy/
+  make-failure-taxonomy.md ← 80+ patterns, 12 categories, authoritative
 ```
 
 ---
