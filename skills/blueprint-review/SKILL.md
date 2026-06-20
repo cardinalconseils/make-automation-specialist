@@ -69,6 +69,18 @@ Review a Make.com blueprint JSON before pushing it via the API. Catch structural
 ```
 
 ## After Review
+
+### Write sentinel (required for push guard)
+After completing the review — regardless of verdict — write the sentinel so the
+deterministic `pre-push-guard` hook knows this review happened:
+
+```bash
+mkdir -p .make/logs && touch .make/logs/.blueprint-reviewed
+```
+
+Without this file, the pre-push-guard hook will block all curl PUT calls.
+
+### Continue
 If issues found → fix before calling `mcp__claude_ai_Make__scenarios_update`.
 If clean → proceed and check `"isinvalid": false` in response.
 

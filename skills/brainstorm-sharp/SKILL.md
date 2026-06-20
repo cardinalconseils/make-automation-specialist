@@ -34,24 +34,9 @@ Wait. Take what comes. Do not ask a follow-up yet.
 
 ## Phase 2 — Diverge: Three Automation Lenses
 
-Choose the 3 most relevant lenses based on what the user said:
+See [diverge-lenses.md](diverge-lenses.md) for the five lens definitions and usage rules.
 
-**REPLACE (different user type):**
-"What if this automation served a completely different role in your business than the obvious one?"
-
-**COMBINE (merge two pain points):**
-"What if you automated [thing they said] AND [adjacent manual step that emerged]?"
-
-**ELIMINATE (strip to minimum):**
-"If you automated only the single most painful moment — what's left? What's the one step that must be automatic?"
-
-**REPURPOSE (new context):**
-"The same automation logic, but applied to a completely different workflow — where else does this pattern exist in your business?"
-
-**AMPLIFY (10× scale):**
-"If this ran 10× more often or processed 10× more records, which part becomes the bottleneck? What would the automation need to handle?"
-
-For each lens: short question, wait, reflect one line, move to next.
+Choose 3 most relevant lenses. For each: short question, wait, reflect one line, move on.
 After all three: synthesize in 2–3 sentences. Do not present as directions yet.
 
 ## Phase 3 — Converge: Pick a Direction
@@ -80,7 +65,7 @@ State the direction:
 > "Direction locked: [one sentence]"
 
 Then assess complexity:
-- **Simple** (single trigger → action → destination, native Make.com apps): hand off directly to kickstart-intake
+- **Simple** (single trigger → action → destination, native Make.com apps): hand off to kickstart-intake
 - **Complex** (multi-step workflow, unclear data shapes, multiple integrations): offer discovery-to-blueprint first
 
 For simple:
@@ -94,18 +79,8 @@ For complex:
 
 ## Deterministic Routing
 
-This skill fires automatically in two cases:
-
+Fires automatically in two cases:
 1. **scenario-orchestrator Gate 0**: no automation direction detected at session start
 2. **kickstart-intake**: user says "I don't know what to automate" or describes vague business pain
 
-In both cases: output is a direction sentence → immediate hand-off to the appropriate next skill.
-Never standalone output.
-
-## Common Rationalizations
-
-| Rationalization | Reality |
-|---|---|
-| "The user described something — that's enough direction" | Test: does it have a trigger, action, and destination? If not, run this skill. |
-| "I'll skip the lenses and go straight to directions" | Lenses are what generates non-obvious directions. Skip them and you get the obvious answer the user already had. |
-| "The user is too vague to converge" | Force a pick: "Which one embarrasses you least to abandon?" It works. |
+Output is a direction sentence → immediate hand-off to the appropriate next skill.

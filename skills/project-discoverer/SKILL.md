@@ -17,7 +17,7 @@ Check for `.make/workspace.json`. If missing, run this skill before any other ac
 ### 1. Detect Available MCPs
 
 Check which MCPs are loaded in the current Claude session:
-- `make` → required. If missing, stop and show setup instructions (see below).
+- `make` → required. If missing, stop and show setup instructions (see [setup-instructions.md](setup-instructions.md)).
 - `telnyx` → note as available/unavailable. Set `alerts_enabled` accordingly.
 - `supabase` → note availability. Surface to user if available.
 - `n8n` → note availability.
@@ -39,30 +39,7 @@ Fetch all scenarios in the workspace:
 
 ### 4. Write workspace.json
 
-Write to `.make/workspace.json`:
-```json
-{
-  "workspace_id": "{make_team_id}",
-  "name": "{team_name}",
-  "region": "{region}",
-  "plan_tier": "{core|pro|teams|enterprise}",
-  "monthly_operation_limit": 10000,
-  "operations_used_this_month": 2341,
-  "scenarios": [
-    {
-      "id": "123",
-      "name": "Lead Intake",
-      "status": "active",
-      "module_count": 8,
-      "last_run_at": "2026-06-09T14:30:00Z"
-    }
-  ],
-  "available_mcps": ["make", "telnyx"],
-  "alerts_enabled": true,
-  "discovered_at": "{timestamp}",
-  "last_refreshed_at": "{timestamp}"
-}
-```
+See [workspace-schema.md](workspace-schema.md) for the full JSON schema.
 
 ### 5. Present Discovery Summary
 
@@ -97,27 +74,6 @@ Telegram alerts are not configured. To enable failure notifications:
 3. Restart Claude Code
 
 Would you like to set this up now?
-```
-
-## Make.com MCP Missing — Setup Instructions
-
-If `make` MCP is not available, show this and stop:
-
-```
-The Make.com MCP is required but not connected.
-
-To set it up:
-1. Add your Make.com API key to your environment:
-   MAKE_API_KEY=your-api-key
-   MAKE_TEAM_ID=your-team-id
-
-2. Add the Make.com MCP to your Claude Code configuration.
-   Documentation: https://www.make.com/en/api-documentation
-
-3. Restart Claude Code and reopen this project.
-
-Your API key is available at:
-https://www.make.com/en/help/account/your-api-key
 ```
 
 ## Refresh

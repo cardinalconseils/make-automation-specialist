@@ -39,54 +39,13 @@ You are READ-ONLY — you never write to Make.com or modify anything.
 1. Ask which scenario
 2. Fetch blueprint
 3. Apply scenario-reader + diagram-generator
-4. Generate written report:
-
-```markdown
-# Scenario Report: {name}
-
-**Generated:** {timestamp}
-**Scenario ID:** {id}
-**Status:** {active / inactive}
-**Last run:** {datetime}
-**Runs this month:** {count}
-**Operations used this month:** {count}
-
-## What This Scenario Does
-{2-3 sentence plain-language description}
-
-## Trigger
-{plain-language trigger description}
-
-## Steps
-{numbered list in plain language — no jargon}
-
-## Data Flow
-{what goes in, what comes out, where it goes}
-
-## Error Handling
-{does it have error handling? what happens on failure?}
-
-## Performance
-| Metric | Value |
-|--------|-------|
-| Operations per run | {n} |
-| Average run time | {ms} |
-| Success rate (30d) | {%} |
-
-## Diagram
-{Mermaid flowchart}
-
-## Observations
-{Any notable patterns, potential issues, or recommendations}
-Note: For a full audit with issue detection, use `/audit`.
-```
-
+4. Generate written report (see [report-template.md](report-template.md))
 5. Save to `.make/audits/{scenario-id}-report-{timestamp}.md`
 6. Display inline
 
 ## Diagram Generator Instructions
 
-See skills/diagram-generator.md for Mermaid syntax rules.
+See skills/diagram-generator/SKILL.md for Mermaid syntax rules.
 Always include:
 - Trigger node (distinct shape)
 - Every module as a process node
