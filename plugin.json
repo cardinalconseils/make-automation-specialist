@@ -1,6 +1,6 @@
 {
   "name": "make-automation-specialist",
-  "version": "1.11.0",
+  "version": "1.12.0",
   "description": "Claude Code plugin that turns any project into an intelligent Make.com automation workspace. Conversational automation building, scenario auditing, compliance assessment, and observability.",
   "author": "pmcardinal",
   "license": "MIT",
@@ -44,13 +44,21 @@
       ]
     },
     {
+      "id": "kickstart-planner",
+      "name": "Kickstart Planner",
+      "file": "agents/kickstart-planner.md",
+      "description": "Plan-mode discovery agent. Enters plan mode, interviews user, writes project plan, generates artifacts after approval.",
+      "triggers": [
+        "slash:kickstart"
+      ]
+    },
+    {
       "id": "scenario-orchestrator",
       "name": "Scenario Orchestrator",
       "file": "agents/scenario-orchestrator.md",
-      "description": "Full-lifecycle orchestrator. Runs Kickstart \u2192 Bootstrap \u2192 System Design \u2192 Sprint to build a portfolio of scenarios in one guided session.",
+      "description": "Full-lifecycle orchestrator. Runs Kickstart → Bootstrap → System Design → Sprint to build a portfolio of scenarios in one guided session.",
       "triggers": [
-        "slash:factory",
-        "slash:kickstart"
+        "slash:factory"
       ]
     },
     {
@@ -76,7 +84,7 @@
       "id": "scenario-reporter",
       "name": "Scenario Reporter",
       "file": "agents/scenario-reporter.md",
-      "description": "Generates visual Mermaid flowcharts and written reports for scenarios. Read-only \u2014 no MCP writes.",
+      "description": "Generates visual Mermaid flowcharts and written reports for scenarios. Read-only — no MCP writes.",
       "triggers": [
         "slash:diagram",
         "slash:report"
@@ -86,7 +94,7 @@
       "id": "ai-agent-builder",
       "name": "AI Agent Builder",
       "file": "agents/ai-agent-builder.md",
-      "description": "Designs and builds AI-powered agents inside Make.com scenarios. Guides model selection, tool inventory, memory strategy, and pattern choice \u2014 then produces a validated blueprint and builds with full approval gates.",
+      "description": "Designs and builds AI-powered agents inside Make.com scenarios. Guides model selection, tool inventory, memory strategy, and pattern choice — then produces a validated blueprint and builds with full approval gates.",
       "triggers": [
         "slash:agent",
         "slash:ai-agent",
@@ -108,7 +116,7 @@
       "id": "deep-researcher",
       "name": "Integration Researcher",
       "file": "agents/deep-researcher.md",
-      "description": "Researches Make.com integrations before building \u2014 checks native app support, API docs, rate limits, webhook availability, and known gotchas.",
+      "description": "Researches Make.com integrations before building — checks native app support, API docs, rate limits, webhook availability, and known gotchas.",
       "triggers": [
         "slash:research"
       ]
@@ -145,6 +153,10 @@
     {
       "id": "kickstart-intake",
       "file": "skills/kickstart-intake/SKILL.md"
+    },
+    {
+      "id": "kickstart-plan",
+      "file": "skills/kickstart-plan/SKILL.md"
     },
     {
       "id": "plan-builder",
@@ -390,49 +402,68 @@
       "id": "diagnose",
       "file": "commands/diagnose.md",
       "description": "Diagnose a Make.com failure using taxonomy-first protocol.",
-      "triggers": ["slash:diagnose"]
+      "triggers": [
+        "slash:diagnose"
+      ]
     },
     {
       "id": "blueprint-review",
       "file": "commands/blueprint-review.md",
       "description": "Review a Make.com blueprint JSON for issues before pushing.",
-      "triggers": ["slash:blueprint-review"]
+      "triggers": [
+        "slash:blueprint-review"
+      ]
     },
     {
       "id": "taxonomy",
       "file": "commands/taxonomy.md",
       "description": "View, search, or update the Make Failure Taxonomy.",
-      "triggers": ["slash:taxonomy"]
+      "triggers": [
+        "slash:taxonomy"
+      ]
     },
     {
       "id": "version",
       "file": "commands/version.md",
       "description": "Show installed vs latest plugin version, detect staleness, and surface the upgrade path.",
-      "triggers": ["slash:make:version", "slash:version"]
+      "triggers": [
+        "slash:make:version",
+        "slash:version"
+      ]
     },
     {
       "id": "migrate",
       "file": "commands/migrate.md",
       "description": "Detect version gap, show CHANGELOG entries for missed releases, and guide the upgrade.",
-      "triggers": ["slash:make:migrate", "slash:migrate"]
+      "triggers": [
+        "slash:make:migrate",
+        "slash:migrate"
+      ]
     },
     {
       "id": "status",
       "file": "commands/status.md",
       "description": "Live workspace dashboard — active scenarios, operations usage, recent alerts, pending plans.",
-      "triggers": ["slash:status"]
+      "triggers": [
+        "slash:status"
+      ]
     },
     {
       "id": "research",
       "file": "commands/research.md",
       "description": "Research a service or integration before building — native app support, rate limits, webhook availability, gotchas.",
-      "triggers": ["slash:research"]
+      "triggers": [
+        "slash:research"
+      ]
     },
     {
       "id": "existing-scenarios",
       "file": "commands/existing-scenarios.md",
       "description": "Map existing Make.com scenarios into plain-language context artifacts. Read-only.",
-      "triggers": ["slash:existing-scenarios", "slash:map"]
+      "triggers": [
+        "slash:existing-scenarios",
+        "slash:map"
+      ]
     }
   ],
   "taxonomy": {
