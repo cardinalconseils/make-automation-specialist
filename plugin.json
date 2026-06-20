@@ -1,6 +1,6 @@
 {
   "name": "make-automation-specialist",
-  "version": "1.12.0",
+  "version": "1.13.0",
   "description": "Claude Code plugin that turns any project into an intelligent Make.com automation workspace. Conversational automation building, scenario auditing, compliance assessment, and observability.",
   "author": "pmcardinal",
   "license": "MIT",
@@ -363,6 +363,13 @@
       "event": "PreToolUse:Bash",
       "script": "scripts/pre-push-guard.js",
       "description": "Deterministic workflow gate. Blocks curl PUT to Make.com scenarios unless plan file exists and blueprint-review sentinel is present."
+    },
+    {
+      "id": "kickstart-plan-guard",
+      "file": "hooks/kickstart-plan-guard.md",
+      "event": "PreToolUse:Write",
+      "script": "scripts/kickstart-plan-guard.js",
+      "description": "Deterministic artifact gate. Blocks writes to .make/context/ and .make/prd.md unless a kickstart plan file exists for today. Cannot be bypassed by agent reasoning."
     },
     {
       "id": "post-execute",

@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.13.0] — 2026-06-20
+
+### Features
+- deterministic kickstart artifact gate
+- brainstorm-sharp + discovery-to-blueprint + council-of-5 — pre-flight discovery chain
+
+### Other
+- Merge remote-tracking branch 'origin/release/v1.5.1' into release/v1.5.1
+
+
 ## [1.12.0] — 2026-06-20
 
 ### Features
