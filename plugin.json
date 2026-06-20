@@ -1,6 +1,6 @@
 {
   "name": "make-automation-specialist",
-  "version": "1.10.1",
+  "version": "1.11.0",
   "description": "Claude Code plugin that turns any project into an intelligent Make.com automation workspace. Conversational automation building, scenario auditing, compliance assessment, and observability.",
   "author": "pmcardinal",
   "license": "MIT",
@@ -281,6 +281,14 @@
     {
       "id": "council-of-5",
       "file": "skills/council-of-5/SKILL.md"
+    },
+    {
+      "id": "blueprint-fetch",
+      "file": "skills/blueprint-fetch/SKILL.md"
+    },
+    {
+      "id": "blueprint-push",
+      "file": "skills/blueprint-push/SKILL.md"
     }
   ],
   "hooks": [
@@ -331,6 +339,12 @@
       "file": "hooks/on-error-classify.md",
       "event": "before.agent.respond",
       "description": "Deterministic error classifier. Detects Make error patterns in context and prepends taxonomy code(s) so the agent always consults the taxonomy before responding."
+    },
+    {
+      "id": "pre-push-guard",
+      "file": "hooks/pre-push-guard.md",
+      "event": "before.agent.respond",
+      "description": "Workflow gate. Blocks any local blueprint push (curl PUT) unless a plan file exists in .make/plans/ and blueprint-review was run this session."
     }
   ],
   "output": {

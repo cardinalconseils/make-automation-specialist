@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.11.0] — 2026-06-20
+
+### Features
+- `blueprint-fetch` skill — `/blueprint-fetch` entry point for pulling live blueprints from Make API into `.make/scenarios/{id}.json` before any local editing begins
+- `blueprint-push` skill — `/blueprint-push` unified push cycle: review gate → plan check → API push → `isinvalid` validation → log creation. The only sanctioned path for writing blueprint changes to Make
+- `pre-push-guard` hook (`before.agent.respond`) — workflow gate that blocks any local blueprint push unless a plan file exists in `.make/plans/` and blueprint-review was run this session
+
+### Architecture
+Completes the hybrid workflow protocol: MCP tools for reads, local JSON + API push for writes. The `blueprint-fetch` → edit → `blueprint-push` cycle is now fully encoded as skills and enforced by the `pre-push-guard` hook.
+
 ## [1.10.1] — 2026-06-16
 
 
