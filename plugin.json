@@ -365,6 +365,13 @@
       "description": "Deterministic workflow gate. Blocks curl PUT to Make.com scenarios unless plan file exists and blueprint-review sentinel is present."
     },
     {
+      "id": "kickstart-plan-guard",
+      "file": "hooks/kickstart-plan-guard.md",
+      "event": "PreToolUse:Write",
+      "script": "scripts/kickstart-plan-guard.js",
+      "description": "Deterministic artifact gate. Blocks writes to .make/context/ and .make/prd.md unless a kickstart plan file exists for today. Cannot be bypassed by agent reasoning."
+    },
+    {
       "id": "post-execute",
       "file": "hooks/post-execute.md",
       "event": "PostToolUse:mcp__claude_ai_Make__|PostToolUse:mcp__telnyx__",
