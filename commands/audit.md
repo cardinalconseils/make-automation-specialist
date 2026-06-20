@@ -27,67 +27,14 @@ For each scenario in scope:
 
 Progress indicator for bulk: "Fetching scenario {n} of {total}: {name}..."
 
-## Phase 2 — Analyze (Deterministic)
+## Phase 2 — Analyze
 
-For each scenario, check every item below. Mark CRITICAL / WARNING / INFO.
-
-**Reliability**
-- [ ] HTTP/API modules missing error handler → CRITICAL
-- [ ] No retry logic on network-dependent modules → WARNING
-- [ ] Trigger re-triggers itself (infinite loop risk) → CRITICAL
-- [ ] Hard-coded credentials or API keys in module config → CRITICAL
-- [ ] Unhandled null/empty data paths → WARNING
-
-**Observability**
-- [ ] No error notification path (nothing alerts on failure) → CRITICAL
-- [ ] No logging of key outcomes → WARNING
-- [ ] No data validation before processing → WARNING
-
-**Efficiency**
-- [ ] High operation count — modules that can be consolidated → WARNING
-- [ ] Full record fetched when only one field needed → WARNING
-- [ ] No filter module before expensive downstream operations → WARNING
-- [ ] Polling trigger where webhook alternative exists → INFO
-- [ ] Duplicate scenario doing the same work → WARNING
-
-**Connections**
-- [ ] Verify each connection used is still active → CRITICAL if broken
-- `make-cli connections verify --connection-id {id}` for each
-
-**Compliance** — call compliance-scanner skill for each scenario
+Full checklist and scoring criteria: see `commands/audit-checklist.md`
 
 ## Phase 3 — Report
 
-Generate structured audit report. Save to `.make/audits/{YYYY-MM-DD-HHmm}-audit.md`.
-
-```
-AUDIT REPORT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Date: {timestamp}
-Scenarios analyzed: {n}
-
-SUMMARY
-  🔴 Critical issues: {n}    (fix immediately — automation may break)
-  🟡 Warnings: {n}           (fix when possible — reduces risk)
-  🔵 Info: {n}               (nice to have)
-
-CRITICAL ISSUES
-  [Scenario Name]
-  Issue: {plain-language description}
-  Why it matters: {impact if not fixed}
-  Proposed fix: {what I will do, in plain language}
-  Risk of fix: Low
-
-WARNINGS
-  ...
-
-COMPLIANCE
-  ...
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-Generate a Mermaid diagram for each scenario with issues (diagram-generator skill).
-Save to `.make/diagrams/`.
+Save to `.make/audits/{YYYY-MM-DD-HHmm}-audit.md`. Generate Mermaid diagram for each
+scenario with issues (diagram-generator skill). Save to `.make/diagrams/`.
 
 ## Phase 4 — Fix Proposal (Approval Gate)
 
@@ -96,17 +43,7 @@ Present grouped fix plan with three approval options:
 - "Fix all issues" — critical + warnings in one approval
 - "Walk me through each" — step through fixes one by one
 
-Each fix shown as:
-```
-FIX #{n}
-Scenario: {name}
-Issue: {short description}
-What I'll change: {plain-language}
-Risk: Low / Medium
-Operations impact: {+/- n}/month
-```
-
-**Do not execute any fix until the user approves.**
+Do not execute any fix until the user approves.
 
 ## Phase 5 — Execute Fixes (Non-Deterministic, After Approval)
 
@@ -116,7 +53,7 @@ For each approved fix:
 3. Validate: re-fetch and confirm change applied
 4. Write changelog: `.make/changelog/{scenario-id}.md`
 
-For broken connections: guide user through reconnection (cannot be scripted — requires UI auth).
+For broken connections: guide user through reconnection (requires UI auth).
 
 ## Phase 6 — Debrief
 

@@ -1,70 +1,56 @@
 ---
-description: Project discovery — generates context artifacts from interview or existing scenarios. Does NOT build.
+description: Project discovery in plan mode — interviews you, writes a plan for review, then generates all artifacts on approval. Does NOT build.
 argument-hint: Optional — describe your project idea or the first automation
 ---
 
 # /kickstart — Make.com Project Discovery
 
-Phase 0 (Memory Load) + Phase 1 (Discovery + Artifact Generation).
-Does NOT proceed to bootstrap, design, or sprint.
+> **Plan mode is entered automatically.** No files are written until you review
+> and approve the project plan.
 
-## Step 0 — Memory Load
+Routes to `kickstart-planner` agent.
 
-Check `.make/memory/sessions/` for prior context.
-If found: summarize and ask "Update existing context or start fresh?"
+---
 
-## Step 0.5 — Mode Selection
+## What Happens
 
-Ask the user:
+**Phase 1 — Discovery (plan mode)**
+- Claude enters plan mode immediately
+- Interviews you about your automations (no Make.com API calls)
+- Asks one question at a time; plain language throughout
 
-```
-Are you starting fresh, or do you have existing Make.com scenarios
-to map, improve, or debug?
+**Phase 2 — Plan**
+- Writes `.claude/plans/make-kickstart-{date}.md`
+- Shows: automation portfolio, draft ERD, required connections, cost estimate, build order
 
-[1] New project — I'll interview you and build a plan from scratch
-[2] Existing project — I'll read your current scenarios and reverse-engineer a project map
-```
+**Phase 3 — Approval**
+- You review the plan
+- Reply to approve or request changes
+- Nothing is written to `.make/` until you say go
 
-- If **[1] New project** → proceed to Step 1.
-- If **[2] Existing project** → run `existing-scenario-discovery` skill, then jump to Step 3.
+**Phase 4 — Artifact Generation**
+- `.make/context/context.md`
+- `.make/prd.md`
+- `.make/context/erd.md`
+- `.make/context/system-design.md`
+- `.make/context/stack.md`
+- `.make/context/ai-agents.md` (only if AI required)
 
-## Step 1 — Opening (new project only)
+---
 
-If argument provided: `"Got it — let's build around '{argument}'. What triggers this?"`
-If no argument: `"What's the main thing you want to automate? Plain language is fine."`
-
-## Step 2 — Intake (new project only)
-
-Run `kickstart-intake` skill. Collect full portfolio, confirm before proceeding.
-
-## Step 3 — Generate Artifacts
-
-Run artifact generation from `kickstart-intake` skill:
-1. `.make/context/context.md`
-2. `.make/prd.md`
-3. `.make/context/erd.md`
-4. `.make/context/system-design.md`
-5. `.make/context/stack.md`
-
-File writes only — no MCP calls in this step.
-
-## Step 4 — Write Memory
-
-Append non-obvious facts discovered to `.make/memory/facts.md`.
-
-## Step 5 — Closing
+## Next Steps After Kickstart
 
 ```
-Your project is mapped. Files generated in .make/context/
-
-Next steps:
 • /factory  — full pipeline: bootstrap → design → build
 • /plan {title}  — design a single automation
 • /status  — check your Make.com workspace
 ```
 
+---
+
 ## Hard Rules
 
-- No Make.com MCP calls except inside `existing-scenario-discovery` skill
-- Never skip portfolio confirmation before writing artifacts
+- `EnterPlanMode` is always the first action — see `kickstart-discipline.md`
+- No Make.com MCP calls during discovery and planning phases
+- Never skip plan approval before writing artifacts
 - If `.make/context/context.md` exists: ask before overwriting

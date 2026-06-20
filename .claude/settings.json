@@ -5,11 +5,33 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "mcp__claude_ai_Make__scenarios_create|mcp__claude_ai_Make__scenarios_update|mcp__claude_ai_Make__scenarios_delete|mcp__claude_ai_Make__scenarios_activate|mcp__claude_ai_Make__scenarios_deactivate|mcp__claude_ai_Make__scenarios_run|mcp__claude_ai_Make__scenarios_set-interface|mcp__claude_ai_Make__hooks_create|mcp__claude_ai_Make__hooks_update|mcp__claude_ai_Make__hooks_delete|mcp__claude_ai_Make__data-stores_create|mcp__claude_ai_Make__data-stores_update|mcp__claude_ai_Make__data-stores_delete|mcp__claude_ai_Make__data-store-records_create|mcp__claude_ai_Make__data-store-records_update|mcp__claude_ai_Make__data-store-records_replace|mcp__claude_ai_Make__data-store-records_delete|mcp__claude_ai_Make__data-structures_create|mcp__claude_ai_Make__data-structures_update|mcp__claude_ai_Make__data-structures_delete|mcp__claude_ai_Make__data-structures_generate|mcp__claude_ai_Make__folders_create|mcp__claude_ai_Make__folders_update|mcp__claude_ai_Make__folders_delete|mcp__claude_ai_Make__keys_delete|mcp__claude_ai_Make__credential-requests_create|mcp__claude_ai_Make__credential-requests_delete|mcp__claude_ai_Make__credential-requests_credential-delete|mcp__claude_ai_Make__rpc_execute|mcp__claude_ai_Make__tools_create|mcp__claude_ai_Make__tools_update|mcp__claude_ai_Make__teams_create|mcp__claude_ai_Make__teams_update|mcp__claude_ai_Make__teams_delete|mcp__claude_ai_Make__organizations_create|mcp__claude_ai_Make__organizations_update|mcp__claude_ai_Make__organizations_delete",
+        "matcher": "mcp__claude_ai_Make__scenarios_create|mcp__claude_ai_Make__scenarios_update|mcp__claude_ai_Make__scenarios_delete|mcp__claude_ai_Make__scenarios_activate|mcp__claude_ai_Make__scenarios_deactivate|mcp__claude_ai_Make__scenarios_run|mcp__claude_ai_Make__scenarios_set-interface|mcp__claude_ai_Make__hooks_create|mcp__claude_ai_Make__hooks_update|mcp__claude_ai_Make__hooks_delete|mcp__claude_ai_Make__data-stores_create|mcp__claude_ai_Make__data-stores_update|mcp__claude_ai_Make__data-stores_delete|mcp__claude_ai_Make__data-store-records_create|mcp__claude_ai_Make__data-store-records_update|mcp__claude_ai_Make__data-store-records_replace|mcp__claude_ai_Make__data-store-records_delete|mcp__claude_ai_Make__data-structures_create|mcp__claude_ai_Make__data-structures_update|mcp__claude_ai_Make__data-structures_delete|mcp__claude_ai_Make__data-structures_generate|mcp__claude_ai_Make__folders_create|mcp__claude_ai_Make__folders_update|mcp__claude_ai_Make__folders_delete|mcp__claude_ai_Make__keys_delete|mcp__claude_ai_Make__credential-requests_create|mcp__claude_ai_Make__credential-requests_delete|mcp__claude_ai_Make__credential-requests_credential-delete|mcp__claude_ai_Make__credential-requests_credential-decline|mcp__claude_ai_Make__rpc_execute|mcp__claude_ai_Make__tools_create|mcp__claude_ai_Make__tools_update|mcp__claude_ai_Make__teams_create|mcp__claude_ai_Make__teams_update|mcp__claude_ai_Make__teams_delete|mcp__claude_ai_Make__organizations_create|mcp__claude_ai_Make__organizations_update|mcp__claude_ai_Make__organizations_delete",
         "hooks": [
           {
             "type": "command",
             "command": "node /Users/pmc/Documents/DEV/make.com/scripts/pre-execute-hook.js",
+            "timeout": 5000
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node /Users/pmc/Documents/DEV/make.com/scripts/pre-push-guard.js",
+            "timeout": 5000
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "mcp__claude_ai_Make__|mcp__telnyx__",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node /Users/pmc/Documents/DEV/make.com/scripts/post-execute-hook.js",
             "timeout": 5000
           }
         ]

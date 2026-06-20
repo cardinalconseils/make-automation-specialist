@@ -45,57 +45,15 @@ Ask user for expected volume when trigger is webhook or watch and they haven't s
 | Teams | 10,000 + extras | ~$29/user |
 | Enterprise | Custom | Custom |
 
-Note: Additional operation bundles available. Do not guarantee pricing — direct user
-to https://www.make.com/en/pricing for current rates.
+Note: Do not guarantee pricing — direct user to https://www.make.com/en/pricing for current rates.
 
 ## External API Cost Estimation
 
-For scenarios using AI or paid APIs, estimate per-run cost:
-
-| Service | Unit | Estimated cost |
-|---------|------|---------------|
-| OpenAI GPT-4o | per 1k tokens | ~$0.005 |
-| OpenAI GPT-4o-mini | per 1k tokens | ~$0.0002 |
-| Anthropic Claude Sonnet | per 1k tokens | ~$0.003 |
-| SendGrid email | per email | ~$0.001 |
-| Twilio SMS | per SMS | ~$0.0079 |
-| Google Maps geocode | per call | ~$0.005 |
-
-Always caveat: "Prices are estimates based on public rates as of mid-2026. Verify current
-pricing on the service provider's website."
+See [api-costs.md](api-costs.md) for per-service cost reference table.
 
 ## Output Format
 
-Include in every AutomationPlan:
-
-```markdown
-## Cost Estimate
-
-### Make.com Operations
-| Item | Count |
-|------|-------|
-| Modules per run | {n} |
-| Estimated runs/month | {n} |
-| **Total operations/month** | **{n}** |
-
-### Monthly Cost Breakdown
-| Item | Cost |
-|------|------|
-| Make.com operations | ${estimate} |
-| OpenAI API (if used) | ${estimate} |
-| Other APIs | ${estimate} |
-| **Total estimated/month** | **${total}** |
-
-### Plan Usage Impact
-| | Before | After |
-|-|--------|-------|
-| Operations used | {current} | {current + new} |
-| Plan limit | {limit} | {limit} |
-| Usage % | {before%} | {after%} |
-
-{Warning if after% > 80%: "This automation will push your monthly usage to X%. 
-Consider upgrading your plan or reducing polling frequency."}
-```
+See [cost-output-format.md](cost-output-format.md) for the full plan cost section template.
 
 ## Usage Tracking
 

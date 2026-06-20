@@ -1,6 +1,6 @@
 {
   "name": "make-automation-specialist",
-  "version": "1.11.0",
+  "version": "1.12.0",
   "description": "Claude Code plugin that turns any project into an intelligent Make.com automation workspace. Conversational automation building, scenario auditing, compliance assessment, and observability.",
   "author": "pmcardinal",
   "license": "MIT",
@@ -44,13 +44,21 @@
       ]
     },
     {
+      "id": "kickstart-planner",
+      "name": "Kickstart Planner",
+      "file": "agents/kickstart-planner.md",
+      "description": "Plan-mode discovery agent. Enters plan mode, interviews user, writes project plan, generates artifacts after approval.",
+      "triggers": [
+        "slash:kickstart"
+      ]
+    },
+    {
       "id": "scenario-orchestrator",
       "name": "Scenario Orchestrator",
       "file": "agents/scenario-orchestrator.md",
-      "description": "Full-lifecycle orchestrator. Runs Kickstart \u2192 Bootstrap \u2192 System Design \u2192 Sprint to build a portfolio of scenarios in one guided session.",
+      "description": "Full-lifecycle orchestrator. Runs Kickstart → Bootstrap → System Design → Sprint to build a portfolio of scenarios in one guided session.",
       "triggers": [
-        "slash:factory",
-        "slash:kickstart"
+        "slash:factory"
       ]
     },
     {
@@ -76,7 +84,7 @@
       "id": "scenario-reporter",
       "name": "Scenario Reporter",
       "file": "agents/scenario-reporter.md",
-      "description": "Generates visual Mermaid flowcharts and written reports for scenarios. Read-only \u2014 no MCP writes.",
+      "description": "Generates visual Mermaid flowcharts and written reports for scenarios. Read-only — no MCP writes.",
       "triggers": [
         "slash:diagram",
         "slash:report"
@@ -86,7 +94,7 @@
       "id": "ai-agent-builder",
       "name": "AI Agent Builder",
       "file": "agents/ai-agent-builder.md",
-      "description": "Designs and builds AI-powered agents inside Make.com scenarios. Guides model selection, tool inventory, memory strategy, and pattern choice \u2014 then produces a validated blueprint and builds with full approval gates.",
+      "description": "Designs and builds AI-powered agents inside Make.com scenarios. Guides model selection, tool inventory, memory strategy, and pattern choice — then produces a validated blueprint and builds with full approval gates.",
       "triggers": [
         "slash:agent",
         "slash:ai-agent",
@@ -108,7 +116,7 @@
       "id": "deep-researcher",
       "name": "Integration Researcher",
       "file": "agents/deep-researcher.md",
-      "description": "Researches Make.com integrations before building \u2014 checks native app support, API docs, rate limits, webhook availability, and known gotchas.",
+      "description": "Researches Make.com integrations before building — checks native app support, API docs, rate limits, webhook availability, and known gotchas.",
       "triggers": [
         "slash:research"
       ]
@@ -145,6 +153,10 @@
     {
       "id": "kickstart-intake",
       "file": "skills/kickstart-intake/SKILL.md"
+    },
+    {
+      "id": "kickstart-plan",
+      "file": "skills/kickstart-plan/SKILL.md"
     },
     {
       "id": "plan-builder",
@@ -289,6 +301,10 @@
     {
       "id": "blueprint-push",
       "file": "skills/blueprint-push/SKILL.md"
+    },
+    {
+      "id": "existing-scenario-discovery",
+      "file": "skills/existing-scenario-discovery/SKILL.md"
     }
   ],
   "hooks": [
@@ -301,8 +317,9 @@
     {
       "id": "pre-execute",
       "file": "hooks/pre-execute.md",
-      "event": "before.mcp.write",
-      "description": "Approval gate enforcer. Halts any Make.com write MCP call until user confirms."
+      "event": "PreToolUse:mcp__claude_ai_Make__write",
+      "script": "scripts/pre-execute-hook.js",
+      "description": "Deterministic write guard + approval gate. Script enforces phase blocks and L3 token requirement; agent displays gate formats. References: pre-execute-make-classification.md, pre-execute-gate-formats.md, approval-token-protocol.md."
     },
     {
       "id": "post-execute",
@@ -343,8 +360,22 @@
     {
       "id": "pre-push-guard",
       "file": "hooks/pre-push-guard.md",
-      "event": "before.agent.respond",
-      "description": "Workflow gate. Blocks any local blueprint push (curl PUT) unless a plan file exists in .make/plans/ and blueprint-review was run this session."
+      "event": "PreToolUse:Bash",
+      "script": "scripts/pre-push-guard.js",
+      "description": "Deterministic workflow gate. Blocks curl PUT to Make.com scenarios unless plan file exists and blueprint-review sentinel is present."
+    },
+    {
+      "id": "post-execute",
+      "file": "hooks/post-execute.md",
+      "event": "PostToolUse:mcp__claude_ai_Make__|PostToolUse:mcp__telnyx__",
+      "script": "scripts/post-execute-hook.js",
+      "description": "Execution logger. Appends every Make.com and Telnyx MCP call result to .make/logs/tool-audit.log."
+    },
+    {
+      "id": "approval-token-protocol",
+      "file": "hooks/approval-token-protocol.md",
+      "event": "agent.behavior",
+      "description": "Bridge protocol: agent writes approval tokens after L3 user confirmation; pre-execute-hook.js reads and validates them."
     }
   ],
   "output": {
@@ -407,6 +438,31 @@
       "triggers": [
         "slash:make:migrate",
         "slash:migrate"
+      ]
+    },
+    {
+      "id": "status",
+      "file": "commands/status.md",
+      "description": "Live workspace dashboard — active scenarios, operations usage, recent alerts, pending plans.",
+      "triggers": [
+        "slash:status"
+      ]
+    },
+    {
+      "id": "research",
+      "file": "commands/research.md",
+      "description": "Research a service or integration before building — native app support, rate limits, webhook availability, gotchas.",
+      "triggers": [
+        "slash:research"
+      ]
+    },
+    {
+      "id": "existing-scenarios",
+      "file": "commands/existing-scenarios.md",
+      "description": "Map existing Make.com scenarios into plain-language context artifacts. Read-only.",
+      "triggers": [
+        "slash:existing-scenarios",
+        "slash:map"
       ]
     }
   ],

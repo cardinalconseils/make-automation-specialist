@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.12.0] — 2026-06-20
+
+### Features
+- hybrid workflow — blueprint-fetch, blueprint-push, pre-push-guard
+- brainstorm-sharp + discovery-to-blueprint + council-of-5 — pre-flight discovery chain
+
+### Maintenance
+- enforce 100-line file rule — split 40+ oversized files across agents, skills, commands, scripts, and taxonomy
+
+
 ## [1.11.0] — 2026-06-20
 
 ### Features

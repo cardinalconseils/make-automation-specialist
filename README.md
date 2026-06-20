@@ -1,276 +1,61 @@
 # Make.com Automation Specialist — Claude Code Plugin
 
-A Claude Code plugin that turns any project into an intelligent Make.com automation workspace. You describe a business problem in plain English, Claude plans the automation, you approve it, and Claude builds it in Make.com.
+A Claude Code plugin that turns any project into an intelligent Make.com automation
+workspace. Describe a business problem in plain English, Claude plans the automation,
+you approve it, and Claude builds it in Make.com.
 
 ---
 
 ## What this plugin does
 
-- **Build new automations** — Have a conversation with Claude, get a full automation plan with cost estimates, approve it, Claude builds it in Make.com.
-- **Audit existing scenarios** — Claude reads your Make.com scenarios, finds issues, proposes fixes, executes after your approval.
-- **Generate diagrams** — Visual Mermaid flowcharts of any scenario, saved to `.make/diagrams/`.
-- **Compliance assessment** — Auto-detects GDPR, Quebec Law 25, PCI-DSS, and HIPAA requirements when deployed in a project.
-- **Telegram alerts** — If an automation fails and can't auto-recover, you get pinged on Telegram.
-- **Full audit trail** — Everything Claude plans, builds, or fixes is saved to the `.make/` folder with timestamps.
+- **Build new automations** — Conversation → plan with cost estimates → your approval → Claude builds it.
+- **Audit existing scenarios** — Finds issues, proposes ranked fixes, executes after approval.
+- **Generate diagrams** — Mermaid flowcharts saved to `.make/diagrams/`.
+- **Compliance assessment** — Auto-detects GDPR, Quebec Law 25, PCI-DSS, HIPAA.
+- **Telegram alerts** — Pinged on Telegram when an automation fails and can't self-recover.
+- **Full audit trail** — Everything Claude plans, builds, or fixes goes to `.make/` with timestamps.
 
 ---
 
-## Installation
-
-Run this command once to install the plugin for all your projects:
+## Quick start
 
 ```bash
 claude plugin install make-automation-specialist@make-automation-specialist --scope user
 ```
 
-Or install it only for one specific project (run from inside that project):
+Then open any project in Claude Code. The `on-project-open` hook runs automatically.
 
-```bash
-claude plugin install make-automation-specialist@make-automation-specialist --scope project
-```
-
-To verify it installed:
-
-```bash
-claude plugin list
-```
-
-You should see `make-automation-specialist` in the list.
-
-> **Note:** The first time you install, Claude Code needs to know where to find this plugin's marketplace. Add this to your `~/.claude/settings.json` under `extraKnownMarketplaces`:
-> ```json
-> "make-automation-specialist": {
->   "source": { "source": "github", "repo": "cardinalconseils/make-automation-specialist" }
-> }
-> ```
+See [docs/README-setup.md](docs/README-setup.md) for full installation and MCP configuration.
 
 ---
 
-## Setup (Step-by-step)
-
-### Step 1 — Add your Make.com credentials
-
-Copy the example env file and fill in your API keys:
-
-```bash
-cp .env.example .env
-```
-
-Open `.env` and set:
-
-```
-MAKE_API_KEY=your_make_api_key_here
-MAKE_TEAM_ID=your_make_team_id_here
-```
-
-**Where to find these:**
-- Make.com API Key: Go to Make.com → your profile (top right) → API → Generate a token
-- Team ID: In Make.com, look at your URL when in your team — it's the number after `/team/`
-
----
-
-### Step 2 — Add Make.com MCP to Claude Code
-
-Open your Claude Code MCP config file. On Mac it's at:
-
-```
-~/.claude/claude_desktop_config.json
-```
-
-Add this inside the `"mcpServers"` block:
-
-```json
-"make": {
-  "command": "npx",
-  "args": ["-y", "@anthropic-ai/mcp-server-make"],
-  "env": {
-    "MAKE_API_KEY": "your_make_api_key_here",
-    "MAKE_TEAM_ID": "your_make_team_id_here"
-  }
-}
-```
-
----
-
-### Step 3 — (Optional but recommended) Set up Telegram alerts
-
-This lets Claude ping you on Telegram when something breaks and can't be auto-fixed.
-
-1. Open Telegram and search for `@BotFather`
-2. Type `/newbot` and follow the steps to create a bot — save the **API token** it gives you
-3. Start a chat with your new bot, then visit:
-   `https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates`
-   to find your **chat ID** (it's the number next to `"id":`)
-4. Add to your `.env`:
-   ```
-   TELNYX_API_KEY=your_telnyx_api_key
-   TELEGRAM_CHAT_ID=your_telegram_chat_id
-   ```
-
----
-
-### Step 4 — Open this project in Claude Code
-
-That's it. The `on-project-open` hook runs automatically and:
-- Detects which MCPs you have connected
-- Maps your Make.com workspace (teams, scenarios)
-- Creates the `.make/` folder structure
-- Tells you if anything is missing
-
----
-
-## Commands
-
-### Build
+## Slash commands
 
 | Command | What it does |
 |---------|-------------|
-| `/make [description]` | Start an automation conversation. Discovers your workspace, designs the scenario, gets your approval, then builds it. |
+| `/make [description]` | Start an automation — discover, plan, approve, build. |
 | `/build [description]` | Alias for `/make`. |
-| `/plan [description]` | Generate a detailed plan with cost estimate, risk level, and Mermaid diagram — without building anything. |
-| `/factory [idea]` | Full automation factory: Kickstart → Bootstrap → System Design → Sprint. Design your entire automation portfolio in one session, then build them all. |
-| `/kickstart [idea]` | Discovery only — guided interview + context artifacts. Does not build. |
-| `/agent [description]` | Design and build an AI-powered agent inside a Make.com scenario. Guides model selection, tool inventory, and memory strategy. |
+| `/plan [description]` | Plan with cost estimate and diagram — no build. |
+| `/factory [idea]` | Full portfolio: Kickstart → Bootstrap → Design → Sprint. |
+| `/kickstart [idea]` | Discovery + context artifacts only. |
+| `/agent [description]` | Design and build an AI-powered Make.com agent. |
+| `/audit [scenario]` | Audit scenarios; omit argument for full workspace. |
+| `/fix [issue]` | Target a specific issue via failure taxonomy. |
+| `/diagnose [error]` | Taxonomy-first error classification and fix. |
+| `/research [service]` | Integration research before building. |
+| `/diagram [scenario]` | Mermaid flowchart (read-only). |
+| `/report [scenario]` | Plain-language scenario report (read-only). |
+| `/telnyx [task]` | Telnyx platform management. |
+| `/status` | Live workspace dashboard. |
+| `/make:version` | Show installed vs latest version. |
+| `/make:migrate` | Detect version gap and update. |
 
-### Audit & Fix
-
-| Command | What it does |
-|---------|-------------|
-| `/audit [scenario]` | Audit scenarios for errors, missing error handlers, inefficiencies, compliance risks, and cost issues. Proposes ranked fixes, executes after approval. Omit argument for full workspace audit. |
-| `/fix [issue]` | Target a specific issue. Classifies via failure taxonomy before proposing any fix. |
-| `/diagnose [error]` | Taxonomy-first diagnosis. Classifies the error by pattern code, states expected vs actual, prescribes the fix. |
-| `/blueprint-review` | 7-point pre-push review of a blueprint JSON before sending to Make.com API. |
-
-### Research & Report
-
-| Command | What it does |
-|---------|-------------|
-| `/research [service]` | Research an integration before building — native app availability, API docs, rate limits, webhook support, known gotchas. |
-| `/diagram [scenario]` | Generate a Mermaid flowchart for a scenario. Read-only. |
-| `/report [scenario]` | Generate a plain-language report: data flow, performance stats, observations. Read-only. |
-
-### Telnyx / Communications
-
-| Command | What it does |
-|---------|-------------|
-| `/telnyx [task]` | Full Telnyx platform management — phone numbers, connections, AI assistants, call control apps. |
-| `/sms [task]` | SMS setup, troubleshooting, and compliance via Telnyx. |
-| `/voice [task]` | Voice calls, IVR, AI receptionist, SIP trunking via Telnyx. |
-
-### Taxonomy
-
-| Command | What it does |
-|---------|-------------|
-| `/taxonomy` | View, search, or update the Make Failure Taxonomy (80+ patterns, 12 categories). |
-
-### Workspace & Plugin
-
-| Command | What it does |
-|---------|-------------|
-| `/status` | Live workspace dashboard — scenarios, operations usage, connections, recent runs, pending plans, last audit, plugin version. |
-| `/make:version` | Show installed vs latest plugin version. Flags staleness with the upgrade command. |
-| `/make:migrate` | Detect version gap, show CHANGELOG for every missed release, run the update. |
+See [docs/README-commands.md](docs/README-commands.md) for full command reference with examples.
 
 ---
 
-**Example conversations:**
+## Further reading
 
-> "I want to automatically send a Slack message every time a new lead fills out my Typeform"
-
-> "Audit all my Make.com scenarios and tell me what could break"
-
-> "Build me an AI agent that summarizes my Gmail emails every morning"
-
-> "My Google Sheets module is failing with 403 — what's wrong?"
-
----
-
-## Where Claude saves its work
-
-Everything goes into the `.make/` folder inside your project:
-
-```
-.make/
-  plans/       ← Automation plans waiting for your approval
-  logs/        ← Execution history with timestamps and costs
-  scenarios/   ← Saved scenario blueprints
-  changelog/   ← Record of every change Claude made
-  audits/      ← Audit reports from /audit runs
-  compliance/  ← Compliance scan results
-  diagrams/    ← Mermaid flowcharts
-  memory/      ← Persistent session memory
-  research/    ← Integration research notes
-```
-
----
-
-## Optional integrations
-
-The plugin works without these, but they unlock more capabilities:
-
-| Service | What it adds | Env var needed |
-|---------|-------------|----------------|
-| Supabase | Persistent storage for logs and execution history | `SUPABASE_URL`, `SUPABASE_KEY` |
-| n8n | Fallback automation platform when Make.com has limits | `N8N_BASE_URL`, `N8N_API_KEY` |
-| GitHub | Read project context and open PRs for automation configs | `GITHUB_TOKEN` |
-
----
-
-## Plugin structure (for the curious)
-
-```
-plugin.json              ← Plugin manifest (version bumped by scripts/bump-version.sh)
-CHANGELOG.md             ← Full release history (read by /make:migrate)
-agents/
-  automation-specialist  ← Main agent (conversation → plan → build)
-  scenario-orchestrator  ← Portfolio factory (Kickstart → Sprint)
-  scenario-auditor       ← Audit + fix existing scenarios
-  automation-planner     ← Plan generation only, never executes
-  scenario-reporter      ← Diagrams and reports (read-only)
-  ai-agent-builder       ← Design AI agents inside Make.com
-  failure-diagnostician  ← Taxonomy-first error diagnosis
-  taxonomy-curator       ← Maintain and extend the failure taxonomy
-  telnyx-agent           ← Telnyx communications specialist
-  deep-researcher        ← Pre-build integration research
-skills/
-  failure-diagnostician  ← Loaded by all agents on error paths
-  failure-patterns       ← PATTERN-001..008 cross-cutting checks
-  blueprint-review       ← 7-point pre-push checklist
-  error-handler          ← 5 Make error directives + 8-point audit
-  taxonomy-updater       ← Add new patterns to the taxonomy
-  formula-expert         ← Make formula syntax reference
-  compliance-scanner     ← GDPR, Quebec Law 25, PCI-DSS, HIPAA
-  cost-estimator         ← Operation counts and API cost estimates
-  diagram-generator      ← Mermaid flowchart builder
-  (+ 15 more skills)
-hooks/
-  on-project-open        ← Auto-runs on session start, maps workspace
-  pre-execute            ← Approval gate — nothing executes without OK
-  post-execute           ← Logs results, sends alerts on failure
-  on-error               ← Auto-recovery attempt + Telegram alert
-  on-error-classify      ← Prepends taxonomy code to context on error
-  on-sms-voice-context   ← Routes SMS/voice keywords to telnyx-agent
-  on-pre-compact         ← Saves workspace snapshot before compaction
-taxonomy/
-  make-failure-taxonomy.md ← 80+ patterns, 12 categories, authoritative
-```
-
----
-
-## How Claude behaves
-
-A few important things to know:
-
-1. **Claude always asks before doing anything.** It will show you the full plan — including what it will build, estimated costs, and links to relevant Make.com documentation — before touching anything.
-
-2. **Everything is explained simply.** Claude assumes you are not a Make.com expert. No jargon.
-
-3. **Guardrails are always included.** Every automation Claude builds includes error handling, observability, and retry logic — you don't have to ask.
-
-4. **If something breaks,** Claude tries to fix it automatically. If it can't, it logs the error and sends you a Telegram message.
-
----
-
-## Need help?
-
-Just ask Claude: *"What can you help me with?"* and it will walk you through everything.
+- [docs/README-setup.md](docs/README-setup.md) — Installation, MCP config, environment variables
+- [docs/README-architecture.md](docs/README-architecture.md) — How it works, hooks, agents, file structure
+- [docs/README-commands.md](docs/README-commands.md) — Full command reference with examples
