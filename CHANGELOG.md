@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.14.0] — 2026-06-21
+
+### Features
+- post-kickstart build workflow — /build, /next, scenario-builder-worker
+- deterministic kickstart artifact gate
+- hybrid workflow — blueprint-fetch, blueprint-push, pre-push-guard
+- brainstorm-sharp + discovery-to-blueprint + council-of-5 — pre-flight discovery chain
+
+
 ## [1.13.0] — 2026-06-20
 
 ### Features
