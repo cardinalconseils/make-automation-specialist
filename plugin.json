@@ -1,6 +1,6 @@
 {
   "name": "make-automation-specialist",
-  "version": "1.13.0",
+  "version": "1.14.0",
   "description": "Claude Code plugin that turns any project into an intelligent Make.com automation workspace. Conversational automation building, scenario auditing, compliance assessment, and observability.",
   "author": "pmcardinal",
   "license": "MIT",
@@ -39,9 +39,25 @@
       "description": "Primary conversational agent. Discovers business needs, coordinates planning, presents plans for approval, and delegates execution.",
       "triggers": [
         "default",
-        "slash:make",
-        "slash:build"
+        "slash:make"
       ]
+    },
+    {
+      "id": "scenario-builder",
+      "name": "Scenario Builder",
+      "file": "agents/scenario-builder.md",
+      "description": "Post-kickstart build orchestrator. Reads the backlog from .make/context/prd.md, lets the user pick scenarios to build, shows a cost-aware approval plan, then dispatches parallel scenario-builder-worker agents.",
+      "triggers": [
+        "slash:build",
+        "slash:next"
+      ]
+    },
+    {
+      "id": "scenario-builder-worker",
+      "name": "Scenario Builder Worker",
+      "file": "agents/scenario-builder-worker.md",
+      "description": "Parallel worker that builds one Make.com scenario end-to-end — blueprint design, validation, push, optional activation. Dispatched by scenario-builder. Never prompts the user.",
+      "triggers": []
     },
     {
       "id": "kickstart-planner",
