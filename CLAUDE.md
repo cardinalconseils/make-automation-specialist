@@ -59,21 +59,19 @@ Never silently make calls. See `.claude/rules/claude-behaviors-1.md` for full de
 
 ## Slash Commands
 
+Full table in `.claude/rules/commands.md`. The ones used most:
+
 | Command | Agent | Description |
 |---------|-------|-------------|
-| `/kickstart` | scenario-orchestrator | Discover project + generate context artifacts |
-| `/factory` | scenario-orchestrator | Full pipeline: kickstart → bootstrap → design → build |
-| `/make` | automation-specialist | Start new automation conversation |
-| `/build` | automation-specialist | Same as /make |
+| `/kickstart` | kickstart-planner | Discover project + generate context artifacts |
+| `/factory` | scenario-orchestrator | Full pipeline: kickstart → bootstrap → design → sprint |
+| `/make` | automation-specialist | Start a new automation conversation |
 | `/agent` | ai-agent-builder | Design and build an AI agent in Make.com |
-| `/ai-agent` | ai-agent-builder | Alias for /agent |
 | `/audit` | scenario-auditor | Audit one or all scenarios |
-| `/fix` | scenario-auditor | Fix issues in a scenario |
-| `/plan` | automation-planner | Generate plan without executing |
-| `/diagram` | scenario-reporter | Generate Mermaid flowchart |
-| `/report` | scenario-reporter | Written report for a scenario |
-| `/status` | automation-specialist | Show workspace status + recent logs |
-| `/changelog` | automation-specialist | Show fix history for a scenario |
+| `/diagnose` | failure-diagnostician | Classify a failure before fixing it |
+| `/plan` | automation-planner | Plan with cost and risk, execute nothing |
+| `/diagram` · `/report` | scenario-reporter | Flowchart · written report |
+| `/status` | automation-specialist | Workspace status + recent logs |
 
 ## Supplementary Rules
 
@@ -86,3 +84,6 @@ Extended behaviors are in `.claude/rules/`:
 - `failure-taxonomy-protocol.md` — Error classification before fixes
 - `human-intervention.md` — Action Required / Decision Required / Suggestion formats
 - `output-voice.md` — Plain language and auto-clarity overrides
+- `commands.md` — Every slash command, and the repo layout
+- `make-api-gotchas.md` — API traps that cost hours; read before writing blueprint JSON
+- `make-agent-tools.md` — traps specific to AI Agent tools and their module bodies
