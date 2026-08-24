@@ -37,3 +37,6 @@ Thumbs.db
 # Original idea file
 Idea.txt 
 env.local
+
+# CKS control-plane state — local tool state, same category as .make/
+.cks/
