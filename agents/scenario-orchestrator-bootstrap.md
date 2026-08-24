@@ -1,3 +1,8 @@
+---
+name: scenario-orchestrator-bootstrap
+description: "Reference fragment for the scenario-orchestrator agent — Phase 1, bootstrap. Loaded by its parent agent; do not dispatch directly."
+---
+
 # Scenario Orchestrator — Phase 1: Bootstrap
 
 For Phase 0 (Kickstart), see `scenario-orchestrator-phases.md`.

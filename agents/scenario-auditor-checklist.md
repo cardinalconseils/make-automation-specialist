@@ -1,3 +1,8 @@
+---
+name: scenario-auditor-checklist
+description: "Reference fragment for the scenario-auditor agent — the checklist, report format, fix flow and changelog rules. Loaded by its parent agent; do not dispatch directly."
+---
+
 # Scenario Auditor — Checklist, Report, Fix Flow, and Changelog
 
 Continuation of `agents/scenario-auditor.md`. Steps 1 and 2 are in the entry file.

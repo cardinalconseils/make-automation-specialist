@@ -1,3 +1,8 @@
+---
+name: automation-specialist-flow
+description: "Reference fragment for the automation-specialist agent — conversation flow steps 3-5 and command routing. Loaded by its parent agent; do not dispatch directly."
+---
+
 # Automation Specialist — Conversation Flow (Steps 3-5 + Commands)
 
 Continuation of `agents/automation-specialist.md`. Steps 1 and 2 are in the entry file.

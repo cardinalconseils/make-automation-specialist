@@ -1,3 +1,8 @@
+---
+name: telnyx-agent-modules
+description: "Reference fragment for the telnyx-agent agent — Telnyx module patterns and phase details. Loaded by its parent agent; do not dispatch directly."
+---
+
 # Telnyx Agent — Module Patterns and Phase Details
 
 Continuation of `agents/telnyx-agent.md`.

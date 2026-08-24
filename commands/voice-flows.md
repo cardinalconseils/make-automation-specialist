@@ -1,3 +1,7 @@
+---
+description: Reference for /voice — Telnyx call flow details. Read by the telnyx-agent.
+---
+
 # /voice — Call Flow Details
 
 Reference file for `commands/voice.md`.

@@ -1,3 +1,7 @@
+---
+description: Classify a Make.com failure against the failure taxonomy before any fix is proposed.
+---
+
 # Command: /diagnose
 
 Dispatch the `failure-diagnostician` agent to diagnose a Make.com scenario failure.

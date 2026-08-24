@@ -1,3 +1,8 @@
+---
+name: scenario-orchestrator-kickstart
+description: "Reference fragment for the scenario-orchestrator agent — Phase 0c, portfolio review and stakes check. Loaded by its parent agent; do not dispatch directly."
+---
+
 # Scenario Orchestrator — Phase 0c: Portfolio Review and Stakes Check
 
 For Phase 0a-0b (Session setup, Direction check, Interview), see `scenario-orchestrator-phases.md`.

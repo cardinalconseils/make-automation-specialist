@@ -1,3 +1,8 @@
+---
+name: ai-agent-builder-artifact
+description: "Reference fragment for the ai-agent-builder agent — the ai-agents.md entry format. Loaded by its parent agent; do not dispatch directly."
+---
+
 # AI Agent Builder — ai-agents.md Entry Format
 
 Reference file for `agents/ai-agent-builder-intake.md`.

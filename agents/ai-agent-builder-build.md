@@ -1,3 +1,8 @@
+---
+name: ai-agent-builder-build
+description: "Reference fragment for the ai-agent-builder agent — the build loop and blueprint generation steps. Loaded by its parent agent; do not dispatch directly."
+---
+
 # AI Agent Builder — Build Loop and Blueprint Generation
 
 Reference file for `agents/ai-agent-builder.md`.
