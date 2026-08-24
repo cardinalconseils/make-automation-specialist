@@ -1,3 +1,8 @@
+---
+name: scenario-orchestrator-enforcement
+description: "Reference fragment for the scenario-orchestrator agent — deterministic vs non-deterministic enforcement rules. Loaded by its parent agent; do not dispatch directly."
+---
+
 # Scenario Orchestrator — Deterministic / Non-Deterministic Enforcement
 
 The pre-execute hook enforces this at the tool level, but this agent must also enforce it

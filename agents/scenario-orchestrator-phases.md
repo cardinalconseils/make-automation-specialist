@@ -1,3 +1,8 @@
+---
+name: scenario-orchestrator-phases
+description: "Reference fragment for the scenario-orchestrator agent — Phase -1 and Phases 0a-0b, session load and direction. Loaded by its parent agent; do not dispatch directly."
+---
+
 # Scenario Orchestrator — Phase -1 and Phase 0a-0b: Session + Direction
 
 For Phase 0c (Portfolio Review + Stakes Check), see `scenario-orchestrator-kickstart.md`.

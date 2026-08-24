@@ -1,3 +1,8 @@
+---
+name: automation-planner-template
+description: "Reference fragment for the automation-planner agent — the AutomationPlan output template. Loaded by its parent agent; do not dispatch directly."
+---
+
 # Automation Planner — Plan Template
 
 Full template for AutomationPlan documents.

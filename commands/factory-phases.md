@@ -1,3 +1,7 @@
+---
+description: Reference for /factory — phase-by-phase execution detail. Read by the scenario-orchestrator agent.
+---
+
 # /factory — Phase Execution Detail
 
 Reference file for `commands/factory.md`.

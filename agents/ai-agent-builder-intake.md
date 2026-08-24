@@ -1,3 +1,8 @@
+---
+name: ai-agent-builder-intake
+description: "Reference fragment for the ai-agent-builder agent — intake questions and agent-pattern selection. Loaded by its parent agent; do not dispatch directly."
+---
+
 # AI Agent Builder — Intake and Pattern Selection
 
 Reference file for `agents/ai-agent-builder.md`.

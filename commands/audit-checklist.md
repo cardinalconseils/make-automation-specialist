@@ -1,3 +1,7 @@
+---
+description: Reference for /audit — the full audit checklist and scoring criteria. Read by the scenario-auditor agent; not a standalone audit.
+---
+
 # /audit — Full Checklist and Scoring Criteria
 
 Reference file for `commands/audit.md`.

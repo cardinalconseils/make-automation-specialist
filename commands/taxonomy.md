@@ -1,3 +1,7 @@
+---
+description: Add or update a pattern in the Make.com failure taxonomy.
+---
+
 # Command: /taxonomy
 
 Manage the Make Failure Taxonomy — view, search, or add patterns.

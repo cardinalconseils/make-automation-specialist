@@ -1,3 +1,8 @@
+---
+name: scenario-orchestrator-design
+description: "Reference fragment for the scenario-orchestrator agent — Phase 2, system design. Loaded by its parent agent; do not dispatch directly."
+---
+
 # Scenario Orchestrator — Phase 2: System Design
 
 ## Phase 2 — SYSTEM DESIGN: Design All Scenarios

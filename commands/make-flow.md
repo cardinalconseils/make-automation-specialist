@@ -1,3 +1,7 @@
+---
+description: Reference for /make — the full conversation and build flow. Read by the automation-specialist agent.
+---
+
 # /make — Full Conversation and Build Flow
 
 Reference file for `commands/make.md`.

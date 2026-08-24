@@ -1,3 +1,7 @@
+---
+description: Reference for /factory — system design and sprint execution phases. Read by the scenario-orchestrator agent.
+---
+
 # /factory — System Design and Sprint Execution
 
 Reference file for `commands/factory-phases.md`.

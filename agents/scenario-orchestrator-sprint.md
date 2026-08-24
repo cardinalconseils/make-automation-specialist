@@ -1,3 +1,8 @@
+---
+name: scenario-orchestrator-sprint
+description: "Reference fragment for the scenario-orchestrator agent — Phase 3, sprint execution. Loaded by its parent agent; do not dispatch directly."
+---
+
 # Scenario Orchestrator — Phase 3: Sprint Execution
 
 For enforcement rules, see `scenario-orchestrator-enforcement.md`.
