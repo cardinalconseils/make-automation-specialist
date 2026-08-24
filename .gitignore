@@ -2,6 +2,11 @@
 .env
 .env.local
 .env.*.local
+# Backups of a credential file are still a credential file. `.env.local` was
+# ignored but `.env.local.bak-*` was not, so copies sat untracked in git status.
+.env*.bak*
+*.bak-[0-9]*
+env.local*
 
 # Runtime output — Make.com workspace data
 .make/
@@ -31,3 +36,4 @@ Thumbs.db
 
 # Original idea file
 Idea.txt 
+env.local
