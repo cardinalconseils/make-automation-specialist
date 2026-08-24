@@ -1,3 +1,7 @@
+---
+description: Review a Make.com blueprint before it is pushed. Writes the review sentinel that the pre-execute review gate requires.
+---
+
 # Command: /blueprint-review
 
 Review a Make.com blueprint JSON for issues before pushing to the API.

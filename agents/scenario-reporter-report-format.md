@@ -1,3 +1,8 @@
+---
+name: scenario-reporter-report-format
+description: "Reference fragment for the scenario-reporter agent — the written report output format. Loaded by its parent agent; do not dispatch directly."
+---
+
 # Scenario Report Format
 
 Used by scenario-reporter agent for `/report` output.
