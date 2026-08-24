@@ -20,7 +20,9 @@ Load `taxonomy/make-failure-taxonomy.md` before any diagnosis.
 - Webhook-triggered or scheduled?
 
 **Step 2 — Classify**
-Match to taxonomy code. If no match: say so, ask more questions.
+Match to taxonomy code. If no match: say so, ask more questions, and load
+`skills/help-docs/SKILL.md` to search help.make.com for the error text or behaviour
+before declaring a new pattern — many "unknown" failures are documented limits.
 
 **Step 3 — Output**
 ```

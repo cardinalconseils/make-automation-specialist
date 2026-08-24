@@ -21,9 +21,9 @@ description: Markdown template for the Make.com kickstart plan document. Populat
 
 ## Automation Portfolio
 
-| # | Title | Trigger | Action | Complexity | Est. Ops/Month |
-|---|-------|---------|--------|------------|----------------|
-| {n} | {title} | {trigger} | {action} | Low / Med / High | ~{N} |
+| # | Title | Trigger | Action | Execution model | Complexity | Est. Ops/Month |
+|---|-------|---------|--------|-----------------|------------|----------------|
+| {n} | {title} | {trigger} | {action} | scenario / hybrid / ai-agent | Low / Med / High | ~{N} |
 
 **Total estimated operations:** ~{total}/month
 **Estimated Make.com cost:** ~${X}/month at current plan rates
@@ -34,10 +34,11 @@ description: Markdown template for the Make.com kickstart plan document. Populat
 
 - [ ] `.make/context/context.md` — project domain, users, goals, integrations
 - [ ] `.make/prd.md` — full PRD with user stories and acceptance criteria
-- [ ] `.make/context/erd.md` — data flow diagram (Mermaid)
+- [ ] `.make/context/erd.md` — integration map + entity model ERD (Mermaid)
+- [ ] `.make/context/process-map.md` — as-is process flowchart, manual steps flagged
 - [ ] `.make/context/system-design.md` — architecture, triggers, dependencies
 - [ ] `.make/context/stack.md` — required apps, connections, API keys
-- [ ] `.make/context/ai-agents.md` — AI agent inventory *(only if AI required)*
+- [ ] `.make/context/ai-agents.md` — AI agent inventory *(only if the Routing Verdict is `ai-agent` or `hybrid`)*
 
 ---
 

@@ -21,7 +21,25 @@ No `scenarios_create`, no `scenarios_update` — those happen in Sprint phase on
 Permitted: AskUserQuestion, `apps_recommend`, `app-modules_list`, `app-module_get`,
 `app_documentation_get`, `data-stores_list`, Read / Write
 
+## Precondition — Routing Verdict
+
+Do not run this skill without a Routing Verdict from `skills/execution-model/SKILL.md`.
+
+- `ai-agent` or `hybrid` → proceed. On `hybrid`, design the agent for **only** the
+  indeterministic step named in the verdict, and give it a structured output contract so
+  everything downstream is deterministic again.
+- `scenario` → **stop.** Tell the user the automation is deterministic, cite the
+  verdict's Reason line, and hand back to `plan-builder`. If they have information that
+  changes the picture, re-run `execution-model` with it — never override the verdict
+  silently.
+
+For current Make AI Agent semantics — tool calling, memory, iteration limits — load
+`skills/help-docs/SKILL.md` rather than answering from memory; this surface changes often.
+
 ## When to Call This Skill
+
+The keyword list below is a **detection hint for the interview**, not the decision.
+The decision is the Routing Verdict above.
 
 Call this skill whenever an automation contains any of:
 - "AI", "LLM", "language model", "ChatGPT", "Claude", "Gemini"

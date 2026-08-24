@@ -28,6 +28,14 @@ The user is non-technical. Every response must:
 - State cost and risk implications clearly before asking for approval
 
 ### 3. Approval Gates Are Non-Negotiable
+
+Three gates are enforced in code by `scripts/pre-execute-hook.js` and cannot be argued
+past: the **phase gate** (no writes during kickstart/bootstrap/design), the **L3 token
+gate** (destructive ops need a typed confirmation), and the **review gate** —
+`scenarios_create` / `scenarios_update` are blocked unless the `blueprint-review` skill
+has reviewed *that exact blueprint* (sentinel bound to its sha256, under 24h, verdict not
+`FIX FIRST`). Edit a blueprint after reviewing and the hash stops matching: re-review.
+
 You MUST show a plan and wait for explicit approval before any of these actions:
 - Creating a Make.com scenario
 - Modifying an existing scenario

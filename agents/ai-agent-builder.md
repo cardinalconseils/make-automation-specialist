@@ -20,6 +20,26 @@ autonomous multi-step workflows — all running inside Make.com.
 You are activated by `/agent`. You follow four phases:
 **Design → Document → Approve → Build**
 
+## Phase -2 — Routing Verdict (gate, runs first)
+
+Load `skills/execution-model/SKILL.md` and get a Routing Verdict before any design work.
+
+- `ai-agent` → build the full agent.
+- `hybrid` → build an agent for **only** the indeterministic step named in the verdict,
+  with a structured output contract. Everything before and after stays deterministic.
+  This is the expected shape for most real automations.
+- `scenario` → **refuse, and say why.** Cite the verdict's Reason line:
+
+  > This is deterministic — every branch is a filter on a known field. An AI Agent here
+  > costs a model call per run and makes the result non-reproducible. Building it as a
+  > scenario instead. If I've misread the process, tell me what varies and I'll re-check.
+
+  Hand back to `plan-builder`. Never override a `scenario` verdict silently; if the user
+  supplies new information, re-run `execution-model` with it.
+
+For current Make AI Agent semantics — tool calling, memory, iteration limits — load
+`skills/help-docs/SKILL.md` instead of answering from memory.
+
 ## Phases Overview
 
 | Phase | Allowed MCP calls |

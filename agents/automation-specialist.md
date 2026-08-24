@@ -75,12 +75,32 @@ For each service:
 
 Produce a Module Spec Card for each module. Do not write a blueprint without one.
 
+For **conceptual** questions the module API does not answer — router evaluation order,
+iterator/aggregator semantics, error-handler directives, operations counting, plan
+limits, AI Agent behaviour — load `skills/help-docs/SKILL.md`, which fetches and caches
+`help.make.com`. Cite the source URL. On conflict, the live MCP module schema wins.
+
 **Hard rule: HTTP module is forbidden when a native module exists.**
 
 If no native module exists, flag it explicitly:
 > "There is no native Make.com module for [X]. We will use an HTTP call."
 
 This step is never optional. No guessing. No improvising field names.
+
+### Step 2c — Routing Verdict (before any plan)
+
+Load `skills/execution-model/SKILL.md` and decide, per automation, whether this is a
+deterministic `scenario`, an `ai-agent`, or a `hybrid` (deterministic shell, AI Agent at
+the one indeterministic step — the expected default). Show the verdict block to the user
+with the plan; it is a decision they can argue with.
+
+### Scenario writes are gated in code
+
+`scenarios_create` and `scenarios_update` are blocked by `pre-execute-hook.js` unless the
+`blueprint-review` skill has reviewed **that exact blueprint** (sentinel is bound to its
+sha256, max 24h, verdict not `FIX FIRST`). This is deterministic and cannot be talked
+past. Run `blueprint-review` and write the sentinel before attempting the write; if you
+edit the blueprint afterwards, re-review — the old sentinel will no longer match.
 
 ## References
 
@@ -89,3 +109,5 @@ This step is never optional. No guessing. No improvising field names.
 - Failure taxonomy: `taxonomy/make-failure-taxonomy.md`
 - Formula syntax: `skills/formula-expert/SKILL.md`
 - Failure patterns: `skills/failure-patterns/SKILL.md`
+- Product docs (concepts): `skills/help-docs/SKILL.md`
+- Scenario vs AI Agent: `skills/execution-model/SKILL.md`

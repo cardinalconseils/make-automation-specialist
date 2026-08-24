@@ -38,6 +38,21 @@ See [DOCS-RESEARCH-STEPS.md](./DOCS-RESEARCH-STEPS.md) for:
 
 ---
 
+## Conceptual Questions → help-docs
+
+This skill answers **"what are this module's fields?"** — via the MCP module API, which
+is authoritative for field specs.
+
+It does not answer **"how does this behave?"**: router evaluation order, iterator and
+aggregator semantics, error-handler directives, operations counting and billing, plan
+limits, AI Agent behaviour. For those, load `skills/help-docs/SKILL.md`, which fetches
+and caches `help.make.com`.
+
+On any conflict, the live MCP module schema wins over help.make.com prose — the docs are
+often written against an older connector version.
+
+---
+
 ## Connection Verification
 
 For each connection type identified in Step 3, verify it exists in the workspace:

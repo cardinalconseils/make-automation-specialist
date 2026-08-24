@@ -5,7 +5,8 @@
  * Fires on Bash tool calls. Blocks any curl PUT to the Make.com scenarios
  * endpoint unless BOTH conditions are met:
  *   1. A plan file exists in .make/plans/
- *   2. .make/logs/.blueprint-reviewed sentinel is present and < 24h old
+ *   2. .make/logs/.blueprint-reviewed sentinel is present, < 24h old, and its verdict
+ *      is not "FIX FIRST" (same JSON sentinel the MCP-path review gate reads)
  *
  * This gate cannot be bypassed by agent reasoning — it is enforced in code.
  */
@@ -50,20 +51,36 @@ process.stdin.on('end', () => {
     );
   }
 
-  // Check 2 — blueprint reviewed (< 24h)
-  let reviewed = false;
-  try {
-    if (fs.existsSync(SENTINEL)) {
-      const ageHours = (Date.now() - fs.statSync(SENTINEL).mtimeMs) / 3600000;
-      reviewed = ageHours < 24;
-    }
-  } catch (_) {}
+  // Check 2 — blueprint reviewed (JSON sentinel, < 24h, verdict not FIX FIRST)
+  //
+  // Note: this path is a raw curl, so there is no blueprint in the tool input to hash
+  // against. Freshness + verdict is all that can be verified here. The MCP path
+  // (pre-execute-hook.js) additionally binds the sentinel to the blueprint's sha256.
+  let sentinel = null;
+  try { sentinel = JSON.parse(fs.readFileSync(SENTINEL, 'utf8')); } catch (_) {}
 
-  if (!reviewed) {
+  if (!sentinel) {
     block(
-      'PUSH BLOCKED — Blueprint not reviewed.\n' +
+      'PUSH BLOCKED — Blueprint not reviewed (missing, legacy, or corrupt sentinel).\n' +
+      'The old touch-file sentinel is no longer accepted — it could not prove WHICH ' +
+      'blueprint was reviewed.\n' +
       'Run /blueprint-review on this scenario JSON first, then retry the push.\n' +
       'This gate cannot be bypassed.'
+    );
+  }
+
+  const ts = Date.parse(sentinel.ts || '');
+  if (!ts || Date.now() - ts > 24 * 3600 * 1000) {
+    block(
+      'PUSH BLOCKED — Review is missing a timestamp or older than 24h.\n' +
+      'Re-run /blueprint-review, then retry the push.'
+    );
+  }
+
+  if (String(sentinel.verdict || '').toUpperCase().includes('FIX FIRST')) {
+    block(
+      'PUSH BLOCKED — Last review verdict was FIX FIRST.\n' +
+      'Resolve the issues the review listed, re-review, then retry.'
     );
   }
 

@@ -5,6 +5,7 @@
  * HARD GATES (exit 2 = blocked, never negotiable):
  *   1. Phase gate — blocks writes during kickstart/bootstrap/design phases
  *   2. L3 gate  — blocks destructive ops unless approval token present
+ *   3. Review gate — blocks scenarios_create/update unless THIS blueprint was reviewed
  *
  * AUDIT (always):
  *   Appends every write attempt to .make/logs/tool-audit.log
@@ -12,12 +13,13 @@
 
 const fs = require('fs');
 const path = require('path');
-const { checkFactoryPhase, checkL3Token } = require('./pre-execute-gates');
+const { checkFactoryPhase, checkL3Token, checkBlueprintReview } = require('./pre-execute-gates');
 
 const CWD = process.cwd();
 const LOG_DIR   = path.join(CWD, '.make', 'logs');
 const FACTORY   = path.join(CWD, '.make', 'factory', 'current-session.json');
 const TOKEN_DIR = path.join(CWD, '.make', 'logs', '.approval-tokens');
+const SENTINEL  = path.join(CWD, '.make', 'logs', '.blueprint-reviewed');
 
 const LEVEL3 = new Set([
   'mcp__claude_ai_Make__scenarios_delete',
@@ -68,6 +70,7 @@ process.stdin.on('end', () => {
 
   checkFactoryPhase(FACTORY, block);
   checkL3Token(LEVEL3, TOKEN_DIR, toolName, block);
+  checkBlueprintReview(SENTINEL, toolName, toolInput, block);
 
   if (LEVEL2.has(toolName)) {
     process.stderr.write(

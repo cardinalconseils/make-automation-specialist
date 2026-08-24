@@ -70,19 +70,47 @@ Review a Make.com blueprint JSON before pushing it via the API. Catch structural
 
 ## After Review
 
-### Write sentinel (required for push guard)
-After completing the review — regardless of verdict — write the sentinel so the
-deterministic `pre-push-guard` hook knows this review happened:
+### Write sentinel (required — both write paths are gated on it)
+After completing the review — regardless of verdict — record it. Save the exact blueprint
+you reviewed to a file, then:
 
 ```bash
-mkdir -p .make/logs && touch .make/logs/.blueprint-reviewed
+# Resolve the plugin root: env var when running as an installed plugin, dev clone otherwise.
+PR="${CLAUDE_PLUGIN_ROOT:-$HOME/Documents/DEV/make.com}"
+node "$PR/scripts/blueprint-sentinel.js" <blueprint.json> "<VERDICT>" "<scenario name or id>"
 ```
 
-Without this file, the pre-push-guard hook will block all curl PUT calls.
+If neither path resolves, find it: the script sits next to `pre-execute-gates.js`, whose
+location is in the `PreToolUse` hook command in your `settings.json`.
+
+VERDICT is your verdict line: `PUSH`, `FIX FIRST`, or `NEEDS HUMAN REVIEW`.
+
+The script writes `.make/logs/.blueprint-reviewed` as JSON — timestamp, verdict, and the
+**sha256 of the blueprint you reviewed**. Two deterministic hooks read it:
+
+- `pre-execute-hook.js` blocks `scenarios_create` / `scenarios_update` unless that hash
+  matches the blueprint actually being pushed.
+- `pre-push-guard.js` blocks curl PUT unless the sentinel is fresh and not `FIX FIRST`.
+
+Always write the sentinel with the script, never by hand — it uses the same canonical
+hash the gate computes, so the two can never disagree. Hand-writing the JSON with a
+guessed hash will block the push.
+
+**Consequences of the hash binding:**
+- Change one byte of the blueprint after reviewing → the gate blocks. Re-review.
+- A `FIX FIRST` verdict blocks the push outright. Fix, then re-review.
+- The sentinel expires after 24h.
 
 ### Continue
-If issues found → fix before calling `mcp__claude_ai_Make__scenarios_update`.
+If issues found → fix, then **re-review and re-write the sentinel** before calling
+`mcp__claude_ai_Make__scenarios_update`. The sentinel is bound to the old bytes; a fixed
+blueprint needs a fresh one.
 If clean → proceed and check `"isinvalid": false` in response.
+
+### On a `hybrid` routing verdict
+Also confirm the AI Agent module returns **structured output**, and that downstream
+filters/routers read that structure rather than raw model text. Routing on free text is
+the most common way a hybrid scenario becomes non-reproducible.
 
 ## Escalation
 
