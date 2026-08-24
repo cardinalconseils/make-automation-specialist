@@ -52,6 +52,33 @@ mkdir -p .make/plans && echo x > .make/plans/p.md
 node "$SENT" bp.json "PUSH" t >/dev/null
 chk "curl PUT with plan+review ok"     "$(runp '{"tool_name":"Bash","tool_input":{"command":"curl -X PUT https://eu2.make.com/api/v2/scenarios/1"}}')" 0
 
+echo "▸ Hook registration (a gate that never fires is not a gate)"
+HJ="$PLUGIN_ROOT/hooks/hooks.json"
+PJ="$PLUGIN_ROOT/plugin.json"
+VALID=$(python3 -c "import json,sys;json.load(open(sys.argv[1]));print(0)" "$HJ" 2>/dev/null || echo 1)
+chk "hooks/hooks.json exists and parses"        "$VALID" 0
+
+# Every script a hook points at must exist, or the hook silently never runs.
+CHECK_PATHS='import json,sys,os,re
+bad=0
+for arr in json.load(open(sys.argv[1]))["hooks"].values():
+    for e in arr:
+        for h in e["hooks"]:
+            m=re.search(r"\$\{CLAUDE_PLUGIN_ROOT\}(/[^\"\s]+)",h["command"])
+            if not m or not os.path.isfile(sys.argv[2]+m.group(1)): bad+=1
+print(bad)'
+RESOLVE=$(python3 -c "$CHECK_PATHS" "$HJ" "$PLUGIN_ROOT" 2>/dev/null || echo 1)
+chk "every hook command resolves to a script"   "$RESOLVE" 0
+
+# Every hook plugin.json declares must actually be registered. kickstart-plan-guard
+# was declared but registered nowhere for four releases; this is how that gets caught.
+CHECK_REG='import json,sys
+reg=json.dumps(json.load(open(sys.argv[1])))
+d=json.load(open(sys.argv[2]))
+print(sum(1 for h in d.get("hooks",[]) if h.get("script") and h["script"].split("/")[-1] not in reg))'
+UNREG=$(python3 -c "$CHECK_REG" "$HJ" "$PJ" 2>/dev/null || echo 1)
+chk "every declared hook script is registered"  "$UNREG" 0
+
 echo ""
 if [ "$FAIL" -eq 0 ]; then echo "  ✅ Review gate: $PASS/$PASS passed"; exit 0
 else echo "  ❌ Review gate: $FAIL of $((PASS+FAIL)) failed"; exit 1; fi

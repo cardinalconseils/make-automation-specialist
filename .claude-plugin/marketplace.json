@@ -11,7 +11,7 @@
       "name": "make-automation-specialist",
       "source": "./",
       "description": "Turns Claude into a Make.com expert: conversational automation building, scenario auditing, AI agent creation, compliance assessment, and Telegram alerting.",
-      "version": "1.0.0"
+      "version": "1.15.0"
     }
   ]
 }
