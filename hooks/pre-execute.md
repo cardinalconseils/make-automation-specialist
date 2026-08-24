@@ -12,10 +12,36 @@ Before any Make.com or Telnyx write call, you MUST:
 
 1. Classify the tool → see `hooks/pre-execute-make-classification.md`
 2. Check factory phase (script does this automatically — will block if wrong phase)
-3. Display the correct approval gate → see `hooks/pre-execute-gate-formats.md`
-4. Wait for valid approval phrase
-5. For LEVEL 3 only: write approval token → see `hooks/approval-token-protocol.md`
-6. Log outcome to `.make/logs/approvals.md`
+3. For `scenarios_create` / `scenarios_update`: run the `blueprint-review` skill and
+   write the review sentinel first (script blocks otherwise — see Review Gate below)
+4. Display the correct approval gate → see `hooks/pre-execute-gate-formats.md`
+5. Wait for valid approval phrase
+6. For LEVEL 3 only: write approval token → see `hooks/approval-token-protocol.md`
+7. Log outcome to `.make/logs/approvals.md`
+
+---
+
+## Review Gate (hard, deterministic)
+
+`scripts/pre-execute-hook.js` blocks `mcp__claude_ai_Make__scenarios_create` and
+`..._update` unless `.make/logs/.blueprint-reviewed` satisfies **all** of:
+
+| Condition | Why |
+|---|---|
+| Exists and parses as JSON | Legacy `touch` sentinels are rejected — they could not prove *which* blueprint was reviewed |
+| `ts` less than 24h old | A review goes stale |
+| `verdict` is not `FIX FIRST` | The reviewer already said no |
+| `hash` equals sha256 of the blueprint in the call | The reviewed bytes are the pushed bytes |
+
+Write it with the script, never by hand — it shares the gate's canonicalizer:
+
+```bash
+PR="${CLAUDE_PLUGIN_ROOT:-$HOME/Documents/DEV/make.com}"
+node "$PR/scripts/blueprint-sentinel.js" <blueprint.json> "<VERDICT>" "<scenario>"
+```
+
+Edit the blueprint after reviewing → the hash no longer matches → re-review. That is the
+gate working, not a bug. It cannot be bypassed by agent reasoning.
 
 For Telnyx tools: see `hooks/pre-execute-telnyx.md`
 

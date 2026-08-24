@@ -36,7 +36,7 @@ Receives from kickstart-planner:
 
 1. Load template from `PLAN-TEMPLATE.md`
 2. Populate each section from intake data
-3. Generate draft Mermaid ERD from service list
+3. Generate draft Mermaid ERD from service list (integration map + entity model)
 4. Estimate total ops/month (sum of per-automation estimates)
 5. Determine build order (simple → complex, no unresolved dependencies first)
 6. Write to `.claude/plans/make-kickstart-{date}.md`

@@ -21,6 +21,11 @@ check_agent_registration
 check_output_dirs
 check_json_files
 
+# Behavioural test for the deterministic write gates — the only thing between an agent
+# and an unreviewed scenario write, so it runs on every smoke test.
+echo ""
+if ! "$PLUGIN_ROOT/scripts/test-review-gate.sh"; then FAIL=1; fi
+
 echo ""
 if [ "$FAIL" -eq 0 ]; then
   echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

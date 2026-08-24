@@ -7,8 +7,13 @@ For Artifacts 5–6 and the generation summary, see `INTAKE-ARTIFACTS-3.md`.
 
 ## Artifact 3 — erd.md
 
+Two sections in one file: the **integration map** (how data moves) below, then the
+**entity model** (what data exists) — the `erDiagram` + Entity Storage table specified in
+`INTAKE-ARTIFACTS-PROCESS-MAP.md`. Both are required; a file with only the flowchart is
+not an ERD.
+
 ````markdown
-# Automation Data Flow
+# Data Model & Flow
 **Generated:** {date}
 
 ## Integration Map
@@ -39,6 +44,9 @@ flowchart LR
 |--------|--------|---------|-------------|
 | {data type} | {service} | {automation} | {service} |
 ````
+
+Then append the **Entity Model** and **Entity Storage** sections from
+`INTAKE-ARTIFACTS-PROCESS-MAP.md`.
 
 ---
 

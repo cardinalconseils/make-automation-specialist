@@ -1,5 +1,58 @@
 # Changelog
 
+## [1.15.0] — 2026-08-24
+
+### Fixed
+- **Review gate had a hole on the path that mattered.** `pre-push-guard.js` only fired on
+  `Bash` curl PUT, so scenario writes via MCP — `scenarios_create` / `scenarios_update`,
+  the path every agent in this plugin actually uses — were never checked against a
+  blueprint review. `blueprint-review` was advisory. `pre-execute-hook.js` now enforces it
+  (`checkBlueprintReview` in `scripts/pre-execute-gates.js`).
+- **Review sentinel is now bound to the blueprint.** The old `touch
+  .make/logs/.blueprint-reviewed` meant reviewing blueprint A opened the gate for
+  unrelated blueprint B for 24h. The sentinel is now JSON — `{ts, hash, verdict,
+  scenario}` — and the gate passes only when `hash` equals the sha256 of the blueprint in
+  the call, the review is under 24h old, and the verdict is not `FIX FIRST`. Hashing is
+  key-order independent. Legacy touch-file sentinels are rejected, not silently accepted.
+- `pre-push-guard.js` reads the same JSON sentinel, so both write paths share one record.
+  (It has no blueprint in the tool input to hash against, so it verifies freshness and
+  verdict only.)
+
+### Added
+- **`skills/help-docs`** — live `help.make.com` retrieval via firecrawl, cached to
+  `.make/research/help/{slug}.md` with a 14-day TTL. Covers what the MCP module API does
+  not: router/iterator/aggregator semantics, error-handler directives, operations
+  counting and billing, plan limits, AI Agent behaviour. Always cites the source URL;
+  falls back to `WebFetch`, then to saying it cannot reach the docs. Never fabricates a
+  URL. MCP module schemas stay authoritative for field specs.
+- **`skills/execution-model`** — the deterministic-vs-indeterministic routing decision.
+  Emits a Routing Verdict (`scenario` | `ai-agent` | `hybrid`) with the indeterministic
+  step named and a one-line reason. `hybrid` — a deterministic shell with an AI Agent at
+  the single judgement step — is documented as the expected default. Replaces keyword
+  matching as the source of `ai_required`.
+- **`scripts/blueprint-sentinel.js`** — writes the review sentinel using the gate's own
+  canonical hash, so review and gate cannot disagree.
+- **`.make/context/process-map.md`** — new kickstart artifact: the as-is business process
+  as a Mermaid flowchart with actor swimlanes and every step tagged
+  `[manual]` / `[system]` / `[decision]`, manual steps ranked as automation candidates.
+  This is process mapping of the human workflow, distinct from `diagram-generator`, which
+  renders scenarios that already exist.
+- Entity-discovery questions in `kickstart-intake`, feeding a real `erDiagram` in
+  `erd.md`. Previously `erd.md` held only a `flowchart LR` integration map — no entities,
+  attributes, or cardinality. Both views now live in that file, plus an Entity Storage
+  table with the rule that an entity with an existing system of record does not get a
+  duplicate Make data store.
+
+### Changed
+- `plan-builder` gets the Routing Verdict before module selection; `routing_verdict` is
+  on the AutomationPlan and in its guardrail checklist.
+- `ai-agent-builder` and `ai-agent-designer` refuse to build on a `scenario` verdict and
+  cite the reason, instead of building whatever was asked for.
+- `docs-researcher` routes conceptual questions to `help-docs`; `failure-diagnostician`
+  searches help.make.com before declaring a new taxonomy pattern.
+- `automation-specialist` documents that scenario writes are gated in code.
+- `plugin.json`: `firecrawl` added to `mcps.optional`.
+
 ## [1.14.0] — 2026-06-21
 
 ### Features

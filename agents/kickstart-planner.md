@@ -61,10 +61,11 @@ The user reviews the plan. Do not proceed until they approve.
 Run artifact generation from `kickstart-intake/INTAKE-ARTIFACTS.md`:
 1. `.make/context/context.md`
 2. `.make/prd.md`
-3. `.make/context/erd.md`
-4. `.make/context/system-design.md`
-5. `.make/context/stack.md`
-6. `.make/context/ai-agents.md` (only if AI required)
+3. `.make/context/erd.md` — integration map **and** `erDiagram` entity model
+4. `.make/context/process-map.md` — as-is process, actor swimlanes, manual steps flagged
+5. `.make/context/system-design.md`
+6. `.make/context/stack.md`
+7. `.make/context/ai-agents.md` (only if the Routing Verdict is `ai-agent` or `hybrid`)
 
 No MCP calls in this phase. File writes only.
 

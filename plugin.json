@@ -1,6 +1,6 @@
 {
   "name": "make-automation-specialist",
-  "version": "1.14.0",
+  "version": "1.15.0",
   "description": "Claude Code plugin that turns any project into an intelligent Make.com automation workspace. Conversational automation building, scenario auditing, compliance assessment, and observability.",
   "author": "pmcardinal",
   "license": "MIT",
@@ -10,6 +10,7 @@
       "telnyx"
     ],
     "optional": [
+      "firecrawl",
       "supabase",
       "n8n",
       "github"
@@ -321,6 +322,14 @@
     {
       "id": "existing-scenario-discovery",
       "file": "skills/existing-scenario-discovery/SKILL.md"
+    },
+    {
+      "id": "help-docs",
+      "file": "skills/help-docs/SKILL.md"
+    },
+    {
+      "id": "execution-model",
+      "file": "skills/execution-model/SKILL.md"
     }
   ],
   "hooks": [
@@ -335,7 +344,7 @@
       "file": "hooks/pre-execute.md",
       "event": "PreToolUse:mcp__claude_ai_Make__write",
       "script": "scripts/pre-execute-hook.js",
-      "description": "Deterministic write guard + approval gate. Script enforces phase blocks and L3 token requirement; agent displays gate formats. References: pre-execute-make-classification.md, pre-execute-gate-formats.md, approval-token-protocol.md."
+      "description": "Deterministic write guard + approval gate. Script enforces phase blocks, the L3 token requirement, and the blueprint-review gate on scenarios_create/update (sentinel bound to the blueprint sha256). Agent displays gate formats. References: pre-execute-make-classification.md, pre-execute-gate-formats.md, approval-token-protocol.md."
     },
     {
       "id": "post-execute",

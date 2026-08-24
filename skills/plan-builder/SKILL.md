@@ -27,9 +27,32 @@ Identify:
 - **Actions:** What happens at the end (send, write, notify)?
 - **Volume:** Estimated runs per day/month
 
-### 2. Detect AI Requirements
+### 2. Decide the Execution Model (routing verdict)
 
+Load `skills/execution-model/SKILL.md` and apply its test **before** selecting any module.
+It returns:
+
+```
+Routing Verdict: scenario | ai-agent | hybrid
+Indeterministic step: {the one step, or "none"}
+Reason: {one line}
+```
+
+Set `routing_verdict` on the AutomationPlan and derive `ai_required` from it
+(`true` for `ai-agent` and `hybrid`, `false` for `scenario`). Do not set `ai_required`
+from keyword matching — a requirement that merely says "summary" in prose is not an AI
+requirement.
+
+Reproduce the verdict block verbatim in the plan document so the reader can argue with
+the decision rather than reverse-engineer it.
+
+### 2b. Detect AI Requirements
+
+Only when the verdict is `ai-agent` or `hybrid`.
 See [ai-module-selection.md](ai-module-selection.md) for the full AI detection and module selection rules.
+On a `hybrid` verdict, the AI module covers **only** the indeterministic step named in
+the verdict; everything before and after it stays deterministic and routes on the AI
+step's structured output.
 
 ### 3. Select Make.com Modules (Non-AI Steps)
 
@@ -59,6 +82,9 @@ Before finalizing plan, confirm:
 - [ ] Telegram alert path for unresolvable failures
 - [ ] Filter before any expensive downstream operations
 - [ ] No hardcoded credentials — all via Make.com connection manager
+- [ ] Routing verdict recorded, with its Reason line
+- [ ] On `hybrid`: the AI step returns structured output, and downstream filters read
+      that structure rather than raw model text
 - [ ] Operation count estimate included
 - [ ] Cost estimate included
 - [ ] Risk level assigned

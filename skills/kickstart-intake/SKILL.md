@@ -44,13 +44,17 @@ Receives from orchestrator:
 |------|----------|
 | `INTAKE-QUESTIONS.md` | Interview protocol — opening prompts, collection loop, AI detection, complexity classifier, priority ranker |
 | `INTAKE-ARTIFACTS.md` | Artifact generation — context.md, prd.md, erd.md, system-design.md, stack.md, ai-agents.md |
+| `INTAKE-ARTIFACTS-PROCESS-MAP.md` | Process-mapping + entity interview questions; process-map.md and the erd.md entity-model section |
 | `INTAKE-OUTPUTS.md` | Output contract JSON, portfolio display format, edge cases |
 
 ---
 
 ## Execution Order
 
-1. Run discovery interview → see `INTAKE-QUESTIONS.md`
+1. Run discovery interview → see `INTAKE-QUESTIONS.md`, plus the process and entity
+   questions in `INTAKE-ARTIFACTS-PROCESS-MAP.md`
+1b. For each automation, get a Routing Verdict from `skills/execution-model/SKILL.md`
+   and set `ai_required` from it — not from keyword matching
 2. Display portfolio for user confirmation → see `INTAKE-OUTPUTS.md` (Portfolio Display)
 3. Generate project artifacts → see `INTAKE-ARTIFACTS.md`
 4. Return JSON to orchestrator → see `INTAKE-OUTPUTS.md` (Output Contract)
