@@ -17,6 +17,17 @@
 - `pre-push-guard.js` reads the same JSON sentinel, so both write paths share one record.
   (It has no blueprint in the tool input to hash against, so it verifies freshness and
   verdict only.)
+- **The gates were registered nowhere portable, so none of them fired outside this repo.**
+  `plugin.json`'s `hooks[]` array is descriptive metadata; Claude Code registers plugin
+  hooks from `hooks/hooks.json`, and there wasn't one. The guards were wired only in this
+  repo's own `.claude/settings.json` with absolute paths, so every deterministic gate —
+  including the review gate above — fired *only when working inside the plugin's own
+  repo*, never in the projects where scenarios actually get built. `hooks/hooks.json` now
+  registers all four with `${CLAUDE_PLUGIN_ROOT}` so they travel with the plugin.
+  Verified inert outside Make work: each guard exits 0 immediately unless the call is a
+  Make write, a curl PUT to the Make scenarios endpoint, or a write into `.make/context/`.
+- **`scripts/kickstart-plan-guard.js` had never fired.** Declared in `plugin.json` since
+  v1.13.0 and registered nowhere. Now registered by `hooks/hooks.json`.
 
 ### Added
 - **`skills/help-docs`** — live `help.make.com` retrieval via firecrawl, cached to
@@ -52,6 +63,14 @@
   searches help.make.com before declaring a new taxonomy pattern.
 - `automation-specialist` documents that scenario writes are gated in code.
 - `plugin.json`: `firecrawl` added to `mcps.optional`.
+- `.claude/settings.json`: dropped the duplicated absolute-path hook block now that
+  `hooks/hooks.json` registers them; `enabledPlugins` stays. Prevents double-firing when
+  working inside this repo.
+- `.claude-plugin/marketplace.json`: version 1.0.0 -> 1.15.0 (had drifted since v1.0.0).
+- `scripts/test-review-gate.sh`: three registration checks — `hooks.json` parses, every
+  hook command resolves to a real script, and every hook `plugin.json` declares is
+  actually registered. That last one is what catches a `kickstart-plan-guard`-style
+  silent no-op. 17 checks total.
 
 ## [1.14.0] — 2026-06-21
 
