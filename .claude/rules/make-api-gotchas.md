@@ -27,12 +27,24 @@ every route silently skipped, no error anywhere.
 When cloning a module, copy the whole `metadata` object verbatim, including
 `restore.parameters.__IMTCONN__`.
 
+## `http:ActionSendDataAPIKeyAuth` needs six booleans in `mapper`
+
+`shareCookies`, `rejectUnauthorized`, `followRedirect`, `useQuerystring`, `gzip`,
+`useMtls`. Plain `http:ActionSendData` uses `followAllRedirects` instead — the two
+modules do not share a schema. Missing them fails every live run with
+`BundleValidationError: Validation failed for 6 parameter(s)` while `scenarios_run`
+and `scenarios_replay` **succeed**: the MCP path applies schema defaults
+(`appliedDefaults` in `validate_module_configuration`), the runtime does not. A
+green replay is not evidence for a subscenario- or webhook-triggered run.
+
 ## Where errors actually live
 
 ```
 GET /api/v2/dlqs?teamId=&scenarioId=      the real error message
 GET /api/v2/dlqs/{id}/bundle              which modules completed, and their values
 ```
+
+In the bundle, the module whose entry carries an `error` key is the one that failed.
 
 The execution log frequently reports only `"status": "WARNING"` with no detail.
 `causeModule` in the log names the failing app when present.
