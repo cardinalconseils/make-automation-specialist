@@ -49,6 +49,12 @@ In the bundle, the module whose entry carries an `error` key is the one that fai
 The execution log frequently reports only `"status": "WARNING"` with no detail.
 `causeModule` in the log names the failing app when present.
 
+Successful runs expose per-module bundles only through the UI's endpoints —
+`GET /streamer/scenario/{id}/log/v3/{exec}` (module list + `scenarioInput`) and
+`POST /streamer/scenario/{id}/log/{exec}/module/{n}` — cookie auth, so capture
+them via the browser session. `GET /api/v2/scenarios/{id}/executions/{exec}`
+does return the `ReturnData` outputs of a finished run.
+
 Note a scenario with **no error handler** hard-fails (`status 3`) and writes
 **nothing** to the DLQ — the error exists only in the execution log.
 
@@ -71,6 +77,8 @@ that is uninformative, not reassuring. It discovers expiry via a 401 at call tim
 - **No regex literals in mappers** — causes `BlueprintValidationError — N problem(s) found` with no module named. Use plain string `replace`.
 - **Arrays are 1-indexed**: `choices[1]`, `images[1]`, `unsigned_urls[1]`.
 - **`util:SetVariables` (plural) values are not readable as `{{id.name}}`.** Use `util:SetVariable2`, one per value.
+- **`split()` drops empty elements.** A delimiter at position 0 leaves no leading `""`, so `get(split("===T===x"; "===T==="); 2)` is empty; `f||||x|md` splits to `[f,x,md]`. Use `last(split(...))` for a tail, and never rely on positional slots that can be empty.
+- **No string literals inside an expression that lives in a JSON string** (Telegram `replyMarkup`). `{{get(split(x; \"|\"); 2)}}` resolves empty. Use `substring(...)` or a `SetVariable2` ref.
 
 ## Writing scenarios
 
